@@ -20,10 +20,15 @@ const config: Config = {
         'gray-3' : '#828282',
         'gray-1' : '#333333',
         'gray-5' : '#E0E0E0',
+        'white' :  '#FFFFFF',
       },
 
-      screens: {
+      // screens: {
         
+      // },
+      fontFamily: {
+        'sans': ['ui-sans-serif', 'system-ui',],
+        'serif': ['ui-serif', 'Georgia', 'Times New Roman'],
       },
     },
     
