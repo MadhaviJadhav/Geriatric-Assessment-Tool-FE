@@ -1,4 +1,9 @@
-export default function Head1({name,links})
+interface Head1Props {
+    name: string;
+    links: string;
+  }
+   
+const  Head1 =  ({ name, links }:Head1Props) =>
 {
     return (
         <>
@@ -9,3 +14,4 @@ export default function Head1({name,links})
         </>
     )
 }
+export default Head1;

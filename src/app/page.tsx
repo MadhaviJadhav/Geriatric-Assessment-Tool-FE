@@ -26,7 +26,7 @@ export default function Home() {
         <div className='flex flex-col w-3/4 h-3/4'>
           <div className="input flex flex-col gap-5">
 
-            <input className='text-start p-3 self-center bg-gray-6 text-gray-4 w-full h-1/2 font-normal focus:outline-none shadow-md ' type="text" name='username' placeholder="Doctor's ID" onChange={(e) => {
+            <input className='text-start p-3 self-center bg-gray-6 text-gray-4 w-full h-1/2 font-normal focus:outline-none shadow-md' type="text" name='username' placeholder="Doctor's ID" onChange={(e) => {
               setDoctorId(e.target.value)
             }} />
             <input className='text-start p-3 self-center bg-gray-6 text-gray-4 w-full h-1/2 font-normal focus:outline-none shadow-md' type="Password" name='password' placeholder='Password' onChange={(e) => {

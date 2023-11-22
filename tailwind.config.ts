@@ -21,6 +21,7 @@ const config: Config = {
         'gray-1' : '#333333',
         'gray-5' : '#E0E0E0',
         'white' :  '#FFFFFF',
+        'red' : 'rgb(239 68 68)',
       },
 
       // screens: {
