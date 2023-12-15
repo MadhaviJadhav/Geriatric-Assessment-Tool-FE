@@ -1,17 +1,12 @@
 "use client"
 
-import { useState, useEffect } from "react";
-import Head from "./Head";
 import Head1 from "./Head1";
-import Footer from "./Footer";
 import moment from 'moment';
-const Dashboard = () => {
+export default function Dashboard ()  {
 
   return (
     <>
-      <title>Dashboard</title>
-      <div className="w-full h-full flex flex-col gap-3 relative">
-        <Head />
+      <div className="w-full h-full mt-5 flex flex-col gap-3 relative">
         <div className="w-full h-1/10">
           <div className="h-1/10 mx-5  flex flex-col gap-2">
             <Head1 name="Patients" links="See All" />
@@ -69,10 +64,7 @@ const Dashboard = () => {
                   </button>
                 </div>
               </div>
-
-
             </div>
-
           </div>
         </div>
 
@@ -110,7 +102,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="h-1/10 mx-5 gap-2">
+        <div className="h-1/10 mx-5 gap-2 mb-9">
           <Head1 name="FORMS" links="See All"></Head1>
 
           <div className="flex gap-1">
@@ -125,14 +117,7 @@ const Dashboard = () => {
           </div>
 
         </div>
-        <Footer />
       </div>
-
-
-
-
-
     </>
   )
 }
-export default Dashboard;

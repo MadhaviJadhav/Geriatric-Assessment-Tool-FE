@@ -1,14 +1,22 @@
 'use client'
-import React from 'react'
-import Head from '../Form/Head'
-import { useRouter } from 'next/navigation'
-import '../../../styles/global.css'
 
-import { Formik, Form, Field, ErrorMessage } from 'formik'
-import { assementForm2 } from '../schemas'
+import { useRouter } from 'next/navigation'
+import * as Yup from 'yup'
+import { Formik, Form,  ErrorMessage } from 'formik'
+import FormikControl from '@/formik/FormikControl'
+import TextError from '@/formik/TextError'
+
+const dropdownOptions = [
+    { key: 'GA Done By', value: '' },
+    { key: 'ABC', value: 'ABC' },
+    { key: 'PQR', value: 'PQR' },
+    { key: 'Others', value: 'Others' }
+
+]
 const initialValues = {
     geriatric_patient_number: "",
     prospective_Trial_ID: "",
+    GADoneBy: "",
     geriatic_icf: "",
     carg_icf: "",
     reason: "",
@@ -16,26 +24,35 @@ const initialValues = {
 
 }
 
-const Form2 = () => {
+const validationSchema = Yup.object(
+    {
+        geriatric_patient_number: Yup.string().required('Required'),
+        prospective_Trial_ID: Yup.string().required('Required'),
+        GADoneBy:Yup.string().required('Required'),
+        geriatic_icf: Yup.string().oneOf(['Yes', 'No']).required('Required'),
+        carg_icf: Yup.string().oneOf(['Yes', 'No']).required('Required'),
+        reason: Yup.string().required('Required'),
+        setting_of_assessment: Yup.string().oneOf(['OPD', 'In-Patient']).required('Required')
+    }
+)
+
+export default function page() {
 
     const router = useRouter();
 
     const onBack = () => {
-        console.log("HIII");
-        router.push("/Form");
+        router.push("AssessmentForm1");
     }
 
     return (
         <>
-            <div className='w-full h-full '>
-                <Head />
-
+            
                 <Formik
                     initialValues={initialValues}
-                    validationSchema={assementForm2}
+                    validationSchema={validationSchema}
                     onSubmit={(values) => {
-                        console.log("HII")
                         console.log(values)
+                        router.push('/AssessmentForm/AssessmentForm3')
                     }}
                 >
                     {formik => {
@@ -52,77 +69,91 @@ const Form2 = () => {
                                             <div className='flex flex-col gap-8'>
                                                 <div className='box'>
                                                     <label htmlFor="Date Seen" className='label_box'>Geriatric patient number</label>
-                                                    <Field type="text" name="geriatric_patient_number" id="geriatric_patient_number" className='input_box' />
+                                                    <FormikControl control='input' type="text" name="geriatric_patient_number" id="geriatric_patient_number" className='input_box' />
                                                     <br />
                                                     <br />
-                                                    <ErrorMessage name='geriatric_patient_number'></ErrorMessage>
+                                                    {/* <ErrorMessage name='geriatric_patient_number'></ErrorMessage> */}
                                                 </div>
 
                                                 <div className='box'>
                                                     <label htmlFor="Date Seen" className='label_box'>Prospective Trial ID</label>
-                                                    <Field type="text" name="prospective_Trial_ID" id="prospective_Trial_ID" className='input_box' />
+                                                    <FormikControl control='input' type="text" name="prospective_Trial_ID" id="prospective_Trial_ID" className='input_box' />
                                                     <br />
                                                     <br />
-                                                    <ErrorMessage name='prospective_Trial_ID'></ErrorMessage>
+                                                    {/* <ErrorMessage name='prospective_Trial_ID'></ErrorMessage> */}
                                                 </div>
 
                                                 <div className='box text-gray-3'>
 
-                                                    <select name="" id="" className='w-full absolute text-sm top-4 bg-gray-6 pl-4'>
+                                                    <FormikControl control='select'
+                                                        name='GADoneBy'
+                                                        options={dropdownOptions}
+                                                        className='w-full absolute text-sm top-4 bg-gray-6 pl-4' />
+                                                        <br/>
+                                                        <br/>
+                                                        <ErrorMessage component={TextError} name='GADoneBy'></ErrorMessage>
+                                                    {/* <select name="" id="" className='w-full absolute text-sm top-4 bg-gray-6 pl-4'>
                                                         <option value="" className='w-full  absolute '>GA Done By</option>
 
                                                         <option value="">YES</option>
                                                         <option value="">No</option>
-                                                    </select>
+                                                    </select> */}
                                                 </div>
                                             </div>
                                             <div className='h-[81px] flex flex-col gap-4 text-sm font-medium'>
                                                 <div className='text-gray-1'>
                                                     <p>Geriatic ICF Taken</p>
                                                 </div>
-                                                <div className='h-[48px] flex gap-4 text-gray-1 font-medium'>
-                                                    <button type='button' className='button' name='geriatic_icf' id='geriatic_icf' onClick={()=>{
-                                                        formik.setFieldValue('geriatic_icf','Yes')
-                                                        console.log("HII")
-                                                    }}>Yes</button>
-                                                    <button type='button' className='button' name='geriatic_icf' id='geriatic_icf' onClick={()=>{
-                                                        formik.setFieldValue('geriatic_icf','No')
-                                                        console.log("HII")
-                                                    }}>No</button>
+                                                <div>
+                                                    <div className='h-[48px] flex gap-4 text-gray-1 font-medium'>
+                                                        <button type='button' className='button' name='geriatic_icf' id='geriatic_icf' onClick={() => {
+                                                            formik.setFieldValue('geriatic_icf', 'Yes')
+                                                        }}>Yes</button>
+                                                        <button type='button' className='button' name='geriatic_icf' id='geriatic_icf' onClick={() => {
+                                                            formik.setFieldValue('geriatic_icf', 'No')
+                                                        }}>No</button>
+                                                    </div>
+                                                    <ErrorMessage component
+                                                        ={TextError} name='geriatic_icf'></ErrorMessage>
                                                 </div>
                                             </div>
                                             <div className='h-[81px] flex flex-col gap-4 text-sm font-medium'>
                                                 <div className='text-gray-1'>
                                                     <p>CARG ICF Taken?</p>
                                                 </div>
-                                                <div className='h-[48px] flex gap-4 text-gray-1 font-medium'>
-                                                    <button type='button' className='button' name='carg_icf' id='carg_icf' onClick={()=>{
-                                                        formik.setFieldValue('carg_icf','Yes')
-                                                        console.log("HII")
-                                                    }}>Yes</button>
-                                                    <button type='button' className='button' name='carg_icf' id='carg_icf' onClick={()=>{
-                                                        formik.setFieldValue('carg_icf','No')
-                                                        console.log("HII")
-                                                    }}>No</button>
+                                                <div>
+                                                    <div className='flex gap-4 text-gray-1 font-medium'>
+                                                        <button type='button' className='button' name='carg_icf' id='carg_icf' onClick={() => {
+                                                            formik.setFieldValue('carg_icf', 'Yes')
+                                                        }}>Yes</button>
+                                                        <button type='button' className='button' name='carg_icf' id='carg_icf' onClick={() => {
+                                                            formik.setFieldValue('carg_icf', 'No')
+                                                        }}>No</button>
+                                                    </div>
+                                                    <ErrorMessage component
+                                                        ={TextError} name='carg_icf'></ErrorMessage>
                                                 </div>
                                             </div>
 
                                             <div className='box'>
-                                                <Field type="text" name="reason" id="reason" className='input_box' placeholder='Reason' />
+                                                <FormikControl control='input' type="text" name="reason" id="reason" className='input_box' placeholder='Reason' />
                                             </div>
 
                                             <div className='h-[81px] flex flex-col gap-4 text-sm font-medium'>
                                                 <div className='text-gray-1'>
                                                     <p>Setting of Assessment</p>
                                                 </div>
-                                                <div className='h-[48px] flex gap-4 text-gray-1 font-medium'>
-                                                    <button type='button' className='button' name='setting_of_assessment' onClick={()=>{
-                                                        formik.setFieldValue('setting_of_assessment','OPD')
-                                                    }}>OPD</button>
-                                                    <button type='button' className='button' name='setting_of_assessment' onClick={()=>{
-                                                        formik.setFieldValue('setting_of_assessment','In-Patient')
-                                                        console.log("HII")
-                                                    }}>In-Patient</button>
+                                                <div>
+                                                    <div className=' flex gap-4 text-gray-1 font-medium'>
+                                                        <button type='button' className='button' name='setting_of_assessment' onClick={() => {
+                                                            formik.setFieldValue('setting_of_assessment', 'OPD')
+                                                        }}>OPD</button>
+                                                        <button type='button' className='button' name='setting_of_assessment' onClick={() => {
+                                                            formik.setFieldValue('setting_of_assessment', 'In-Patient')
+                                                        }}>In-Patient</button>
+                                                    </div>
+                                                    <ErrorMessage component
+                                                        ={TextError} name='setting_of_assessment'></ErrorMessage>
                                                 </div>
                                             </div>
                                             <div className='h-[80px] py-4  flex gap-4 w-full  text-sm font-medium  shadow-inner'>
@@ -151,10 +182,6 @@ const Form2 = () => {
                         )
                     }}
                 </Formik>
-
-            </div>
         </>
     )
 }
-
-export default Form2
