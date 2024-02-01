@@ -9,16 +9,14 @@ const Selection = (props) => {
             <Field as='select' id={name} name={name} {...rest}>
                 {options.map(option => {
                     return (
-                        <>
-                            <option key={option.value} value={option.value}>{option.key}</option>
-                            <br />
-                            <br />
-                            <ErrorMessage component={TextError} name={name} />
-                        </>
+                        <option key={option.value} value={option.value}>{option.key}</option>
                     )
                 })
                 }
             </Field>
+            <br/>
+            <br/>
+            <ErrorMessage component={TextError} name={name} />
         </div>
     )
 }

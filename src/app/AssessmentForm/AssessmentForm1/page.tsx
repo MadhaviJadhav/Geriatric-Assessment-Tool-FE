@@ -1,9 +1,11 @@
 'use client'
 
 import * as Yup from 'yup'
-import { Formik, Form } from 'formik'
+import { Formik, Form, ErrorMessage } from 'formik'
 import { useRouter } from 'next/navigation'
 import FormikControl from '@/formik/FormikControl'
+import TextError from '@/formik/TextError'
+
 
 const initialValues = {
   date_seen: "",
@@ -16,11 +18,12 @@ const initialValues = {
 }
 
 const validationSchema = Yup.object({
-  date_seen: Yup.date().typeError('Invalid date format').required('Please enter the vaild date').nullable(),
-  mrn_number: Yup.string().required('MRN Number is Required'),
-  patient_name: Yup.string().min(2).max(25).matches(/^[a-zA-Z ]+$/, 'Name must only contain character').required("Please enter your name"),
+  date_seen: Yup.date().typeError('Invalid date format').required('Please Enter the vaild date').nullable(),
+  mrn_number: Yup.string().required('MRN number is Required'),
+  patient_name: Yup.string().min(2).max(25).matches(/^[a-zA-Z ]+$/, 'Name must only contain character').required("Please Enter the name"),
   age: Yup.number().typeError('Age must be a Number').integer().positive().required('Age is Required'),
   gender: Yup.string().oneOf(['Female', 'Male']).required('Select the Gender'),
+  GT: Yup.boolean().oneOf([false, true], 'Select the Geriatice Trial').required('Select the Geriatice Trial')
 
 })
 export default function page() {
@@ -54,7 +57,7 @@ export default function page() {
                       </div>
                       <div className='box'>
                         <label htmlFor="Date Seen" className='label_box'>Date Seen</label>
-                        <FormikControl control='input' name="date_seen" id="date_seen" className='input_box'
+                        <FormikControl control='date' name="date_seen" id="date_seen" className='input_box'
                         />
 
 
@@ -78,40 +81,49 @@ export default function page() {
 
 
                       </div>
-                      <div className='h-[81px] flex flex-col gap-4 text-sm font-medium'>
-                        <div className='text-gray-1'>
-                          <p>Gender of patient</p>
+                      <div >
+                        <div className='h-[81px] flex flex-col gap-4 text-sm font-medium'>
+                          <div className='text-gray-1'>
+                            <p>Gender of patient</p>
+                          </div>
+                          <div className='h-[48px] flex gap-4 text-gray-1 font-medium'>
+                            {/* <div className=''> */}
+                            <button type='button' name='gender' onClick={() => {
+                              formik.setFieldValue('gender', 'Female');
+                            }} className='button'>Female</button>
+                            <button type='button' name='gender' onClick={() => {
+                              formik.setFieldValue('gender', 'Male');
+                            }} className='button'>Male</button>
+                            {/* </div> */}
+                          </div>
                         </div>
-                        <div className='h-[48px] flex gap-4 text-gray-1 font-medium'>
-                          <button type='button' name='gender' onClick={() => {
-                            formik.setFieldValue('gender', 'Female');
-                          }} className='button'>Female</button>
-                          <button type='button' name='gender' onClick={() => {
-                            formik.setFieldValue('gender', 'Male');
-                          }} className='button'>Male</button>
-
-                        </div>
+                        <ErrorMessage name="gender" component={TextError} />
                       </div>
+
                     </div>
                   </div>
-                  <div className='h-1/5 bg-gray-1 py-3'>
-                    <div className='mx-3 flex flex-col gap-3 text-gray-6 text-sm'>
-                      <div className='h-[17px] capitalize  font-semibold'>
-                        <p>Geriatric Trial</p>
-                      </div>
-                      <div className='font-medium'>
-                        <p>Is this patient a part of the geriatric cancer research?</p>
-                      </div>
-                      <div className='h-[48px] flex gap-4 text-gray-1 font-medium'>
-                        <button type='button' name='GT' onClick={() => {
-                          formik.setFieldValue('GT', 'Yes');
-                          // console.log("HII")
-                        }} className='button'>Yes</button>
-                        <button type='button' name='GT' onClick={() => {
-                          formik.setFieldValue('GT', 'No');
-                        }} className='button'>No</button>
+                  <div>
+                    <div className='h-1/5 bg-gray-1 py-3'>
+                      <div className='mx-3 flex flex-col gap-3 text-gray-6 text-sm'>
+                        <div className='h-[17px] capitalize  font-semibold'>
+                          <p>Geriatric Trial</p>
+                        </div>
+                        <div className='font-medium'>
+                          <p>Is this patient a part of the geriatric cancer research?</p>
+                        </div>
+                        <div className='h-[48px] flex gap-4 text-gray-1 font-medium'>
+                          <button type='button' name='GT' onClick={() => {
+                            formik.setFieldValue('GT', true);
+                            // console.log("HII")
+                          }} className='button'>Yes</button>
+                          <button type='button' name='GT' onClick={() => {
+                            formik.setFieldValue('GT', false);
+                          }} className='button'>No</button>
+                        </div>
+
                       </div>
                     </div>
+                    <ErrorMessage name='GT' component={TextError} />
                   </div>
 
                   {/* <Footer/> */}
@@ -126,7 +138,8 @@ export default function page() {
                       </button>
                     </div>
                     <div className='w-8/12 h-[48px] flex justify-center items-center text-center bg-gray-1 text-gray-6'>
-                      <button className='button_footer' type='submit'>
+                      <button className={`button_footer ${(!formik.isValid || !formik.dirty) ? 'disabled' : ''}`} type='submit'
+                        disabled={!formik.isValid || !formik.dirty}>
                         <p className='uppercase'>Save And Next</p>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
                           <path fillRule="evenodd" d="M3.75 12a.75.75 0 01.75-.75h13.19l-5.47-5.47a.75.75 0 011.06-1.06l6.75 6.75a.75.75 0 010 1.06l-6.75 6.75a.75.75 0 11-1.06-1.06l5.47-5.47H4.5a.75.75 0 01-.75-.75z" clipRule="evenodd" />

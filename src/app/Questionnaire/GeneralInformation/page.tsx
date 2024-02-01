@@ -1,13 +1,13 @@
 "use client"
 
-import Head1 from "../HeadCom";
+import Head1 from "../HeadComp";
 import Question from "../QuestionComp";
 
 import { Formik, Form } from "formik";
 import * as Yup from 'yup';
 import FormikControl from "@/formik/FormikControl";
 
-const dropdownOptions = [
+const states = [
     { key: 'Native State', value: '' },
     { key: 'Maharashtra', value: 'Maharashtra' },
     { key: 'Gujarat', value: 'Gujarat' },
@@ -16,7 +16,7 @@ const dropdownOptions = [
 
 ]
 
-const place = [
+const livingPlace = [
     { key: 'Hotel Hotel', value: 'Hotel Hotel' },
     { key: 'At the relative’s place', value: 'At the relative’s place' },
     { key: 'At the friend’s place', value: 'At the friend’s place' },
@@ -52,15 +52,29 @@ const currentEducation = [
     { key: 'Others', value: 'Others' }
 ]
 const validationSchema = Yup.object({
-    state: Yup.string().required('Please select a state'),
+    states: Yup.string().required('Please select a state'),
+    livingPlace:Yup.string().required('Required'),
+    livingSituation:Yup.string().required('Required'),
+    oras:Yup.string().required('Required'),
+    maritalStatus:Yup.string().required('Required'),
+    currentEducation:Yup.string().required('Required'),
+    familyMembers:Yup.number().required('Required'),
+    occupation:Yup.string().required('Required'),
+    livingPlaceOthers:Yup.string().required('Required'),
+    livingSituationOthers:Yup.string().required('Required'),
 
 })
 const initialValues = {
-    state: "",
-    place: [],
-    livingSituation: [],
-    familyMembers: Number,
-    oras: [],
+    states: "",
+    livingPlace: "",
+    livingSituation: "",
+    oras:"",
+    maritalStatus:"",
+    currentEducation:"",
+    familyMembers:0,
+    occupation:"",
+    livingPlaceOthers:"",
+    livingSituationOthers:""
 }
 
 export default function page() {
@@ -75,12 +89,13 @@ export default function page() {
                     initialValues={initialValues}
                     validationSchema={validationSchema}
                     onSubmit={(values) => {
-                        console.log("HII")
+                        // console.log("HII")
                         console.log(values)
                     }}
 
                 >
                     {(formikProps) => {
+                        console.log(formikProps.errors)
                         return (
                             <Form>
 
@@ -92,13 +107,9 @@ export default function page() {
                                             <div className='box text-gray-3'>
 
                                                 <FormikControl control='select'
-                                                    name='state'
-                                                    options={dropdownOptions}
+                                                    name='states'
+                                                    options={states}
                                                     className='w-full absolute text-sm top-4 bg-gray-6 px-4 apperance-none' />
-                                                <br />
-                                                <br />
-                                                {/* <ErrorMessage component={TextError} name='GADoneBy'></ErrorMessage> */}
-
                                             </div>
                                         </div>
                                     </div>
@@ -107,17 +118,17 @@ export default function page() {
                                         <Question english="Where are you staying in Mumbai city?" marathi="तुम्ही मुंबई शहरात कुठे राहता?" />
 
                                         <div className='mx-5'>
-                                            <FormikControl control='radio' options={place} name='place' />
+                                            <FormikControl control='radio' options={livingPlace} name='livingPlace' />
                                         </div>
 
-                                        {formikProps.values.place === 'Others' && (
+                                        {formikProps.values.livingPlace === 'Others' && (
                                             <div className="px-5">
                                                 <div className="box shadow-md">
                                                     <FormikControl
                                                         control="input"
                                                         type="text"
-                                                        name="placeOther"
-                                                        id="placeOther"
+                                                        name="livingPlaceOthers"
+                                                        id="livingPlaceOthers"
                                                         className="input_box"
                                                         placeholder="Write"
                                                     />
@@ -139,8 +150,8 @@ export default function page() {
                                                     <FormikControl
                                                         control="input"
                                                         type="text"
-                                                        name="livingSituationOther"
-                                                        id="livingSituationOther"
+                                                        name="livingSituationOthers"
+                                                        id="livingSituationOthers"
                                                         className="input_box"
                                                         placeholder="Write"
                                                     />

@@ -1,6 +1,6 @@
 "use client"
 
-import Head1 from "../../HeadCom"
+import Head1 from "../../HeadComp"
 import { Formik, Form, Field } from "formik"
 import * as Yup from 'yup';
 import Question from "../../QuestionComp";
@@ -48,7 +48,7 @@ export default function page() {
 
                                 <div className='flex flex-col gap-6'>
                                     <p>Hearing Handicap Inventory</p>
-                                    <div className="w-full bg-orange-50 p-5">
+                                    <div className="w-full bg-yellow p-5">
                                         <p className="w-full text-sm">
                                             <span className="font-semibold underline uppercase">Instructions:</span>
                                             <span className="font-normal capitalize"> The purpose of the scale is to Identify the problems your hearing loss maybe causing you.</span>
@@ -82,7 +82,7 @@ export default function page() {
                                         <div className="relative">
                                             <Field type='checkbox' name='option1' className='top-1 absolute w-4 h-4' />
                                         </div>
-                                        <label htmlFor="">I have read and understand the instructions</label>
+                                        <label htmlFor="">Patient checked this box</label>
                                     </div>
                                 </div>
 
@@ -182,10 +182,30 @@ export default function page() {
                                         </div>
                                     </div>
                                 </div>
+                 
+                            </div>
 
-                                <div className='mt-24'>
-                                <div className='h-[80px] py-4  flex gap-4 w-full px-7 py-4 text-sm font-medium  shadow-inner'>
-                                    <div className='w-1/3  h-[48px] flex justify-center items-center text-center bg-gray-6 text-gray-1'>
+                            <div className='mt-24'>
+                                    <div className="flex gap-6 bg-gray-5 px-5 py-7">
+                                        <div className="flex gap-2">
+                                            <p className="">Total : </p>
+                                            <p>40</p>
+                                        </div>
+                                        <div className="flex gap-2">
+                                            <p className="">Yes : </p>
+                                            <p>0</p>
+                                        </div>
+                                        <div className="flex gap-2">
+                                            <p className="">Maybe : </p>
+                                            <p>10</p>
+                                        </div>
+                                        <div className="flex gap-2">
+                                            <p className="">No : </p>
+                                            <p>30</p>
+                                        </div>
+                                    </div>
+                                <div className='h-[80px] py-4  flex justify-between w-full px-5 text-sm font-medium  shadow-inner'>
+                                    <div className='w-1/3 px-3 h-[48px] flex justify-center items-center text-center bg-gray-6 text-gray-1'>
                                         <button type='button' className='button_footer'>
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
                                                 <path fillRule="evenodd" d="M20.25 12a.75.75 0 01-.75.75H6.31l5.47 5.47a.75.75 0 11-1.06 1.06l-6.75-6.75a.75.75 0 010-1.06l6.75-6.75a.75.75 0 111.06 1.06l-5.47 5.47H19.5a.75.75 0 01.75.75z" clipRule="evenodd" />
@@ -194,9 +214,9 @@ export default function page() {
                                             <p className='uppercase'>Back</p>
                                         </button>
                                     </div>
-                                    <div className='w-8/12 h-[48px] flex justify-center items-center text-center bg-gray-1 text-gray-6'>
+                                    <div className='w-1/3 h-[48px] flex justify-center items-center text-center bg-gray-1 text-gray-6 px-3'>
                                         <button className='button_footer' type='submit'>
-                                            <p className='uppercase'>Save And Next</p>
+                                            <p className='uppercase'>Next</p>
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
                                                 <path fillRule="evenodd" d="M3.75 12a.75.75 0 01.75-.75h13.19l-5.47-5.47a.75.75 0 011.06-1.06l6.75 6.75a.75.75 0 010 1.06l-6.75 6.75a.75.75 0 11-1.06-1.06l5.47-5.47H4.5a.75.75 0 01-.75-.75z" clipRule="evenodd" />
                                             </svg>
@@ -204,7 +224,6 @@ export default function page() {
                                     </div>
                                 </div>
                                 </div>
-                            </div>
                         </Form>
                     )
                 }}

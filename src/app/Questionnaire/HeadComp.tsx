@@ -4,7 +4,7 @@ interface Head1Props {
     progress:string,
 }
 
-export default function Head1({ name, count, progress }: Head1Props) {
+export default function HeadComp({ name, count, progress }: Head1Props) {
 
     return (
         <>

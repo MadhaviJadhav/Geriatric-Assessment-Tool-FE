@@ -18,13 +18,13 @@ const CheckBox = (props) => {
                                 <div className='flex gap-2'>
                                 <input type='checkbox' id={option.value}
                                 {...field} value={option.value}
-                                checked={field.value.includes(option.value)} />
+                                checked={Boolean(field.value.includes(option.value))} />
                                 <label htmlFor={option.value} className='flex flex-col'><h1>{option.key}</h1></label>
                                 </div>
                                 <br/>
                                 
                             </React.Fragment>
-                            <ErrorMessage component={TextError} name={name}/>
+                            
                             </>
                             
                         )
@@ -32,6 +32,7 @@ const CheckBox = (props) => {
                 }
             }
         </Field>
+        <ErrorMessage component={TextError} name={name}/>
     </div>
   )
 }

@@ -56,6 +56,7 @@ export default function page() {
                     }}
                 >
                     {formik => {
+                        console.log(formik.errors)
                         return (
                             <Form>
                                 <div className='w-full h-full'>
@@ -70,17 +71,11 @@ export default function page() {
                                                 <div className='box'>
                                                     <label htmlFor="Date Seen" className='label_box'>Geriatric patient number</label>
                                                     <FormikControl control='input' type="text" name="geriatric_patient_number" id="geriatric_patient_number" className='input_box' />
-                                                    <br />
-                                                    <br />
-                                                    {/* <ErrorMessage name='geriatric_patient_number'></ErrorMessage> */}
                                                 </div>
 
                                                 <div className='box'>
                                                     <label htmlFor="Date Seen" className='label_box'>Prospective Trial ID</label>
                                                     <FormikControl control='input' type="text" name="prospective_Trial_ID" id="prospective_Trial_ID" className='input_box' />
-                                                    <br />
-                                                    <br />
-                                                    {/* <ErrorMessage name='prospective_Trial_ID'></ErrorMessage> */}
                                                 </div>
 
                                                 <div className='box text-gray-3'>
@@ -89,9 +84,7 @@ export default function page() {
                                                         name='GADoneBy'
                                                         options={dropdownOptions}
                                                         className='w-full absolute text-sm top-4 bg-gray-6 pl-4' />
-                                                        <br/>
-                                                        <br/>
-                                                        <ErrorMessage component={TextError} name='GADoneBy'></ErrorMessage>
+                                                        
                                                     {/* <select name="" id="" className='w-full absolute text-sm top-4 bg-gray-6 pl-4'>
                                                         <option value="" className='w-full  absolute '>GA Done By</option>
 
@@ -167,7 +160,9 @@ export default function page() {
                                                     </button>
                                                 </div>
                                                 <div className='w-8/12 h-[48px] flex justify-center items-center text-center bg-gray-1 text-gray-6'>
-                                                    <button className='button_footer' type='submit'>
+                                                    <button className={`button_footer ${(!formik.isValid || !formik.dirty) ? 'disabled' : ''}`}type='submit' 
+                                                    disabled={!formik.isValid || !formik.dirty}
+                                                    >
                                                         <p className='uppercase'>Save And Next</p>
                                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
                                                             <path fillRule="evenodd" d="M3.75 12a.75.75 0 01.75-.75h13.19l-5.47-5.47a.75.75 0 011.06-1.06l6.75 6.75a.75.75 0 010 1.06l-6.75 6.75a.75.75 0 11-1.06-1.06l5.47-5.47H4.5a.75.75 0 01-.75-.75z" clipRule="evenodd" />

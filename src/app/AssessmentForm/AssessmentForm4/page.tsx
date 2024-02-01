@@ -1,9 +1,10 @@
 'use client'
 
 import FormikControl from '@/formik/FormikControl'
-import { Formik,  Form } from 'formik'
+import { Formik,  Form, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import { useRouter } from 'next/navigation'
+import TextError from '@/formik/TextError'
 
 const devices = [
     { key: 'Smart phone with internet', value: 'Smart phone with internet' },
@@ -29,8 +30,9 @@ const initialValues = {
 }
 
 const validationSchema = Yup.object({
-    devices: Yup.array().required('required'),
-    social_media_on_phone:Yup.string().oneOf(['Yes','No']).required('Required')
+    devices: Yup.array().min(1, 'Required').required('required'),
+    social_media_on_phone:Yup.string().oneOf(['Yes','No']).required('Required'),
+    socialmedia:Yup.array().min(1, 'Required')
 })
 
 
@@ -40,6 +42,7 @@ export default function page(){
     const onBack = ()=>{
         router.push('/AssessmentForm/AssessmentForm3')
     }
+
     return (
 
         <>
@@ -48,6 +51,7 @@ export default function page(){
                     validationSchema={validationSchema}
                     onSubmit={(values) => {
                         console.log(values)
+                        router.push('/Questionnaire')
                     }}>
                     {formik => {
                         return (
@@ -75,6 +79,7 @@ export default function page(){
                                         <p>Does patient use social media on their phone?</p>
 
                                     </div>
+                                    <div>
                                     <div className='h-[48px] flex gap-4 text-gray-1 font-medium'>
                                         <button type='button' className='button' name='social_media_on_phone' onClick={() => {
                                             formik.setFieldValue('social_media_on_phone', 'Yes');
@@ -82,6 +87,8 @@ export default function page(){
                                         <button type='button' className='button' name='social_media_on_phone' onClick={() => {
                                             formik.setFieldValue('social_media_on_phone', 'No');
                                         }}>No</button>
+                                    </div>
+                                    <ErrorMessage component={TextError} name='social_media_on_phone'/>
                                     </div>
                                 </div>
                                 <div className=' flex flex-col gap-8'>
@@ -107,7 +114,11 @@ export default function page(){
                                         </button>
                                     </div>
                                     <div className='w-8/12 h-[48px] flex justify-center items-center text-center bg-gray-1 text-gray-6'>
-                                        <button className='button_footer' type='submit'>
+                                        <button className='button_footer'
+                                        // className={`button_footer ${(!formik.isValid || !formik.dirty) ? 'disabled' : ''}`}
+                                         type='submit' 
+                                        //  disabled={!formik.isValid || !formik.dirty}
+                                         >
                                             <p className='uppercase'>Save And Next</p>
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
                                                 <path fillRule="evenodd" d="M3.75 12a.75.75 0 01.75-.75h13.19l-5.47-5.47a.75.75 0 011.06-1.06l6.75 6.75a.75.75 0 010 1.06l-6.75 6.75a.75.75 0 11-1.06-1.06l5.47-5.47H4.5a.75.75 0 01-.75-.75z" clipRule="evenodd" />

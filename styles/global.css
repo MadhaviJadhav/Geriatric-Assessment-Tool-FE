@@ -13,7 +13,7 @@ body {
 
 .label_box {
    position: absolute;
-   width: 100%;
+   width: 60%;
    left: 16px;
    top: -8px;
    color: #828282;
@@ -78,6 +78,13 @@ body {
    justify-content: center;
    text-align: center;
 }
+
+.button_footer.disabled {
+   /* Styles for the disabled state go here */
+   background-color: #bdc3c7;
+   color: #7f8c8d;
+   cursor: not-allowed;
+ }
 
 /* text-gray-1 text-sm underline hover:no-underline capitalize */
 .link {
@@ -159,3 +166,6 @@ body {
 .range-input::-webkit-progress {
    background:hsl(0, 0%, 20%);
  }
+
+
+ 

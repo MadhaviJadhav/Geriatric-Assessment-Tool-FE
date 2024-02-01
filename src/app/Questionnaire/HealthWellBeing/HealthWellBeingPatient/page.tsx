@@ -1,10 +1,11 @@
 "use client"
 
-import Head1 from "../../HeadCom"
+import Head1 from "../../HeadComp"
 import { Formik, Form, Field } from "formik"
 import * as Yup from 'yup';
 import Question from "../../QuestionComp";
 import '../../../../../styles/global.css'
+import { useRouter } from "next/navigation";
 
 // const option1= [
 //     {key:'I have read and understand the instructions', value:'Yes'},
@@ -25,6 +26,7 @@ const validationSchema = Yup.object({
     feelFrustrated:Yup.string().oneOf(['Yes', 'No', 'Sometimes']).required('Required'),
 })
 export default function page() {
+    const router = useRouter()
     return (
         <>
             <div className="mt-5">
@@ -36,6 +38,7 @@ export default function page() {
                 validationSchema={validationSchema}
                 onSubmit={(values) => {
                     console.log(values)
+                    router.push('/Questionnaire')
                 }}
             >
                 {(formikProps) => {

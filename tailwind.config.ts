@@ -15,6 +15,7 @@ const config: Config = {
       },
       colors: {
         'regal-blue': '#243c5a',
+        'black' : '#000000',
         'gray-6' : '#F2F2F2',
         'gray-4' : '#BDBDBD',
         'gray-3' : '#828282',
@@ -22,6 +23,7 @@ const config: Config = {
         'gray-5' : '#E0E0E0',
         'white' :  '#FFFFFF',
         'red' : 'rgb(239 68 68)',
+         'yellow' : '#F2C94C'
       },
 
       // screens: {

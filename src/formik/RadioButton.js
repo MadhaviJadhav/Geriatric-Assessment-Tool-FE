@@ -17,18 +17,19 @@ const RadioButton = (props) => {
                       <input type='radio' id={option.value} {...field}
                         value={option.value}
                         checked={field.value === option.value} />
-                      <label htmlFor={option.value} className='mb-[49px]'>{option.key}</label>
+                      <label htmlFor={option.value} className='mb-[49px] capitalize'>{option.key}</label>
                     </div>
 
                   </React.Fragment>
                   <br />
-                  <ErrorMessage component={TextError} name={name} />
+                  
                 </>
               )
             })
           }
         }
       </Field>
+      <ErrorMessage component={TextError} name={name} />
     </div>
   )
 }

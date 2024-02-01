@@ -1,12 +1,14 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import Head1 from "../HeadCom";
+import Head1 from "../HeadComp";
 import Question from "../QuestionComp";
 import FormikControl from "@/formik/FormikControl";
 import { Form, Formik } from "formik";
 import * as Yup from 'yup';
 
 import '../../../../styles/global.css'
+import { root } from 'postcss';
+import { useRouter } from 'next/navigation';
 
 const initialValues = {
   pain: 0,
@@ -31,11 +33,13 @@ const validationSchema = Yup.object({
 });
 
 export default function page() {
+  const router = useRouter();
   const [wid, setWid] = useState(Number(window.innerWidth / 10))
   useEffect(() => {
     setWid(window.innerWidth / 10)
   })
   return (
+    
     <>
       <div>
         <div className="mt-5">
@@ -48,6 +52,7 @@ export default function page() {
           onSubmit={(values) => {
             // Handle form submission here
             console.log(values);
+            router.push('/Questionnaire/HealthWellBeing/HealthWellBeingPatient')
           }}
         >
           {(formikProps) => {
