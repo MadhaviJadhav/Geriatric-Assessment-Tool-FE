@@ -65,28 +65,28 @@ const money = [
 ]
 
 const initialValues = {
-    telephoneUse: [],
-    transportationUse: [],
-    shoppingGroceries: [],
-    preparingOwnMeals: [],
-    doOwnHandymanWork: [],
-    doOwnLaundry:[],
-    medicine:[],
-    money:[],
+    telephoneUse: "",
+    transportationUse: "",
+    shoppingGroceries: "",
+    preparingOwnMeals: "",
+    doOwnHandymanWork: "",
+    doOwnLaundry:"",
+    medicine:"",
+    money:"",
     medicationUse:false
 
 
 }
 
 const validationSchema = Yup.object({
-    telephoneUse: Yup.string(),
-    transportationUse: Yup.string(),
-    shoppingGroceries: Yup.string(),
-    preparingOwnMeals: Yup.string(),
-    doOwnHandymanWork: Yup.string(),
-    doOwnLaundry:Yup.string(),
-    medicine:Yup.string(),
-    money:Yup.string(),
+    telephoneUse: Yup.string().min(1,'Required'),
+    transportationUse: Yup.string().min(1,'Required'),
+    shoppingGroceries: Yup.string().min(1,'Required'),
+    preparingOwnMeals: Yup.string().min(1,'Required'),
+    doOwnHandymanWork: Yup.string().min(1,'Required'),
+    doOwnLaundry:Yup.string().min(1,'Required'),
+    medicine:Yup.string().min(1,'Required'),
+    money:Yup.string().min(1,'Required'),
     medicationUse:Yup.boolean().oneOf([true],'Please choose it')
 })
 
@@ -109,7 +109,7 @@ export default function page() {
                    console.log(values)
                 }}
             >
-                {(formikProps) => {
+                {(formik) => {
                     return (
                         <Form>
                             <div className="flex flex-col gap-8">
@@ -153,7 +153,7 @@ export default function page() {
                                 <div className="flex flex-col gap-7">
                                     <div>
                                     <Image src={Meal} className="w-full h-40" alt="Meal"/>
-                                    <Question english="Can you go shopping for groceries?" marathi="" />
+                                    
                                     <Question english="Can you prepare your own meals?" marathi="" />
                                     </div>
                                 
@@ -193,9 +193,9 @@ export default function page() {
                                     <div className="px-5">
                                         <div className="flex gap-4">
                                             <button type="button" className="button" onClick={()=>
-                                            formikProps.setFieldValue('medication','Yes')}>Yes</button>
+                                            formik.setFieldValue('medication','Yes')}>Yes</button>
                                             <button type="button" className="button" onClick={()=>
-                                            formikProps.setFieldValue('medication','No')}>No</button>
+                                            formik.setFieldValue('medication','No')}>No</button>
                                         </div>
                                     </div>
                                     
@@ -238,7 +238,8 @@ export default function page() {
                                             </button>
                                         </div>
                                         <div className='w-8/12 h-[48px] flex justify-center items-center text-center bg-gray-1 text-gray-6'>
-                                            <button className='button_footer' type='submit'>
+                                        <button className={`button_footer ${(!formik.isValid || !formik.dirty) ? 'disabled' : ''}`}type='submit'disabled={!formik.isValid || !formik.dirty}
+                                                    >
                                                 <p className='uppercase'>Save And Next</p>
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
                                                     <path fillRule="evenodd" d="M3.75 12a.75.75 0 01.75-.75h13.19l-5.47-5.47a.75.75 0 011.06-1.06l6.75 6.75a.75.75 0 010 1.06l-6.75 6.75a.75.75 0 11-1.06-1.06l5.47-5.47H4.5a.75.75 0 01-.75-.75z" clipRule="evenodd" />

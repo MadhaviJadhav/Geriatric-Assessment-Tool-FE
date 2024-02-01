@@ -54,6 +54,10 @@ body {
    background-color: #BDBDBD;
    border: 2px solid #333333;
 }
+.button1:focus{
+   background-color: hsl(0, 0%, 74%);
+   border: 2px solid #333333;
+}
 .button:hover {
    background-color: #BDBDBD;
    border: 2px solid #333333;

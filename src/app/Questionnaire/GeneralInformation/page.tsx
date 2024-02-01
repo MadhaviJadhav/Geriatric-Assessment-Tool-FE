@@ -6,6 +6,7 @@ import Question from "../QuestionComp";
 import { Formik, Form } from "formik";
 import * as Yup from 'yup';
 import FormikControl from "@/formik/FormikControl";
+import { useRouter } from "next/navigation";
 
 const states = [
     { key: 'Native State', value: '' },
@@ -60,8 +61,8 @@ const validationSchema = Yup.object({
     currentEducation:Yup.string().required('Required'),
     familyMembers:Yup.number().required('Required'),
     occupation:Yup.string().required('Required'),
-    livingPlaceOthers:Yup.string().required('Required'),
-    livingSituationOthers:Yup.string().required('Required'),
+    livingPlaceOthers:Yup.string(),
+    livingSituationOthers:Yup.string(),
 
 })
 const initialValues = {
@@ -78,6 +79,7 @@ const initialValues = {
 }
 
 export default function page() {
+    const router = useRouter();
     return (
         <>
             <div className="flex flex-col gap-8">
@@ -91,11 +93,12 @@ export default function page() {
                     onSubmit={(values) => {
                         // console.log("HII")
                         console.log(values)
+                        router.push('/Questionnaire')
                     }}
 
                 >
-                    {(formikProps) => {
-                        console.log(formikProps.errors)
+                    {(formik) => {
+                        console.log(formik.errors)
                         return (
                             <Form>
 
@@ -121,7 +124,7 @@ export default function page() {
                                             <FormikControl control='radio' options={livingPlace} name='livingPlace' />
                                         </div>
 
-                                        {formikProps.values.livingPlace === 'Others' && (
+                                        {formik.values.livingPlace === 'Others' && (
                                             <div className="px-5">
                                                 <div className="box shadow-md">
                                                     <FormikControl
@@ -144,7 +147,7 @@ export default function page() {
                                             <FormikControl control='radio' options={livingSituation} name='livingSituation' />
                                         </div>
 
-                                        {formikProps.values.livingSituation === 'Others' && (
+                                        {formik.values.livingSituation === 'Others' && (
                                             <div className="px-5">
                                                 <div className="box shadow-md">
                                                     <FormikControl
@@ -187,7 +190,7 @@ export default function page() {
                                             <FormikControl control='radio' options={currentEducation} name='currentEducation' />
                                         </div>
 
-                                        {formikProps.values.currentEducation === 'Others' && (
+                                        {formik.values.currentEducation === 'Others' && (
                                             <div className="px-5">
                                                 <div className="box shadow-md">
                                                     <FormikControl
@@ -210,7 +213,7 @@ export default function page() {
                                             <FormikControl control='radio' options={maritalStatus} name='maritalStatus' />
                                         </div>
 
-                                        {formikProps.values.maritalStatus === 'Others' && (
+                                        {formik.values.maritalStatus === 'Others' && (
                                             <div className="px-5">
                                                 <div className="box shadow-md">
                                                     <FormikControl
@@ -249,7 +252,9 @@ export default function page() {
                                             </button>
                                         </div>
                                         <div className='w-8/12 h-[48px] flex justify-center items-center text-center bg-gray-1 text-gray-6'>
-                                            <button className='button_footer' type='submit'>
+                                        <button className={`button_footer ${(!formik.isValid || !formik.dirty) ? 'disabled' : ''}`}type='submit' 
+                                                    disabled={!formik.isValid || !formik.dirty}
+                                                    >
                                                 <p className='uppercase'>Save And Next</p>
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
                                                     <path fillRule="evenodd" d="M3.75 12a.75.75 0 01.75-.75h13.19l-5.47-5.47a.75.75 0 011.06-1.06l6.75 6.75a.75.75 0 010 1.06l-6.75 6.75a.75.75 0 11-1.06-1.06l5.47-5.47H4.5a.75.75 0 01-.75-.75z" clipRule="evenodd" />

@@ -22,14 +22,14 @@ const initialValues = {
 };
 
 const validationSchema = Yup.object({
-  pain: Yup.number(),
-  shortnessOfBreath: Yup.number(),
-  wellbeing: Yup.number(),
-  lackOfAppetite: Yup.number(),
-  drowsiness: Yup.number(),
-  anxiety: Yup.number(),
-  depression: Yup.number(),
-  tiredness: Yup.number(),
+  pain: Yup.number().required('Required'),
+  shortnessOfBreath: Yup.number().required('Required'),
+  wellbeing: Yup.number().required('Required'),
+  lackOfAppetite: Yup.number().required('Required'),
+  drowsiness: Yup.number().required('Required'),
+  anxiety: Yup.number().required('Required'),
+  depression: Yup.number().required('Required'),
+  tiredness: Yup.number().required('Required'),
 });
 
 export default function page() {
@@ -55,8 +55,8 @@ export default function page() {
             router.push('/Questionnaire/HealthWellBeing/HealthWellBeingPatient')
           }}
         >
-          {(formikProps) => {
-            // const { values, handleChange } = formikProps;
+          {(formik) => {
+            // const { values, handleChange } = formik;
 
             return (
               <Form>
@@ -67,7 +67,7 @@ export default function page() {
                   />
                   <div className='px-5'>
                     <div className=' relative'>
-                      <p className='text-center border-2 border-gray-5 px-4 py-1 rounded absolute top-[-2.5rem]' style={{ left: `${formikProps.values.pain * Number(wid) - formikProps.values.pain}px` }}>{formikProps.values.pain}</p>
+                      <p className='text-center border-2 border-gray-5 px-4 py-1 rounded absolute top-[-2.5rem]' style={{ left: `${formik.values.pain * Number(wid) - formik.values.pain}px` }}>{formik.values.pain}</p>
                     </div>
                     <div className='h-8 w-full'>
                       <FormikControl
@@ -95,7 +95,7 @@ export default function page() {
 
                   <div className='px-5'>
                     <div className=' relative'>
-                      <p className='text-center border-2 border-gray-5 px-5 py-2 rounded absolute top-[-2.5rem]' style={{ left: `${formikProps.values.tiredness * Number(wid) - formikProps.values.tiredness}px` }}>{formikProps.values.tiredness}</p>
+                      <p className='text-center border-2 border-gray-5 px-5 py-2 rounded absolute top-[-2.5rem]' style={{ left: `${formik.values.tiredness * Number(wid) - formik.values.tiredness}px` }}>{formik.values.tiredness}</p>
                     </div>
                     <div className='h-8 w-full'>
                       <FormikControl
@@ -103,7 +103,7 @@ export default function page() {
                         type='range'
                         id='tiredness'
                         name='tiredness'
-                        min={0}
+                        min={1}
                         max={10}
                         className="range-input text-center w-full"
                       />
@@ -126,7 +126,7 @@ export default function page() {
 
                   <div className='px-5'>
                     <div className=' relative'>
-                      <p className='text-center border-2 border-gray-5 px-5 py-2 rounded absolute top-[-2.5rem]' style={{ left: `${formikProps.values.depression * Number(wid) - formikProps.values.depression}px` }}>{formikProps.values.depression}</p>
+                      <p className='text-center border-2 border-gray-5 px-5 py-2 rounded absolute top-[-2.5rem]' style={{ left: `${formik.values.depression * Number(wid) - formik.values.depression}px` }}>{formik.values.depression}</p>
                     </div>
                     <div className='h-8 w-full'>
                       <FormikControl
@@ -157,7 +157,7 @@ export default function page() {
 
                   <div className='px-5'>
                     <div className=' relative'>
-                      <p className='text-center border-2 border-gray-5 px-5 py-2 rounded absolute top-[-2.5rem]' style={{ left: `${formikProps.values.anxiety * Number(wid) - formikProps.values.anxiety}px` }}>{formikProps.values.anxiety}</p>
+                      <p className='text-center border-2 border-gray-5 px-5 py-2 rounded absolute top-[-2.5rem]' style={{ left: `${formik.values.anxiety * Number(wid) - formik.values.anxiety}px` }}>{formik.values.anxiety}</p>
                     </div>
                     <div className='h-8 w-full'>
                       <FormikControl
@@ -188,7 +188,7 @@ export default function page() {
 
                   <div className='px-5'>
                     <div className=' relative'>
-                      <p className='text-center border-2 border-gray-5 px-5 py-2 rounded absolute top-[-2.5rem]' style={{ left: `${formikProps.values.drowsiness * Number(wid) - formikProps.values.drowsiness}px` }}>{formikProps.values.drowsiness}</p>
+                      <p className='text-center border-2 border-gray-5 px-5 py-2 rounded absolute top-[-2.5rem]' style={{ left: `${formik.values.drowsiness * Number(wid) - formik.values.drowsiness}px` }}>{formik.values.drowsiness}</p>
                     </div>
                     <div className='h-8 w-full'>
                       <FormikControl
@@ -219,7 +219,7 @@ export default function page() {
 
                   <div className='px-5'>
                     <div className=' relative'>
-                      <p className='text-center border-2 border-gray-5 px-5 py-2 rounded absolute top-[-2.5rem]' style={{ left: `${formikProps.values.lackOfAppetite * Number(wid) - formikProps.values.lackOfAppetite}px` }}>{formikProps.values.lackOfAppetite}</p>
+                      <p className='text-center border-2 border-gray-5 px-5 py-2 rounded absolute top-[-2.5rem]' style={{ left: `${formik.values.lackOfAppetite * Number(wid) - formik.values.lackOfAppetite}px` }}>{formik.values.lackOfAppetite}</p>
                     </div>
                     <div className='h-8 w-full'>
                       <FormikControl
@@ -247,7 +247,7 @@ export default function page() {
 
                   <div className='px-5'>
                     <div className=' relative'>
-                      <p className='text-center border-2 border-gray-5 px-5 py-2 rounded absolute top-[-2.5rem]' style={{ left: `${formikProps.values.wellbeing * Number(wid) - formikProps.values.wellbeing}px` }}>{formikProps.values.wellbeing}</p>
+                      <p className='text-center border-2 border-gray-5 px-5 py-2 rounded absolute top-[-2.5rem]' style={{ left: `${formik.values.wellbeing * Number(wid) - formik.values.wellbeing}px` }}>{formik.values.wellbeing}</p>
                     </div>
                     <div className='h-8 w-full'>
                       <FormikControl
@@ -275,7 +275,7 @@ export default function page() {
 
                   <div className='px-5'>
                     <div className=' relative'>
-                      <p className='text-center border-2 border-gray-5 px-5 py-2 rounded absolute top-[-2.5rem]' style={{ left: `${formikProps.values.shortnessOfBreath * Number(wid) - formikProps.values.shortnessOfBreath}px` }}>{formikProps.values.shortnessOfBreath}</p>
+                      <p className='text-center border-2 border-gray-5 px-5 py-2 rounded absolute top-[-2.5rem]' style={{ left: `${formik.values.shortnessOfBreath * Number(wid) - formik.values.shortnessOfBreath}px` }}>{formik.values.shortnessOfBreath}</p>
                     </div>
                     <div className='h-8 w-full'>
                       <FormikControl
@@ -311,7 +311,9 @@ export default function page() {
                       </button>
                     </div>
                     <div className='w-8/12 h-[48px] flex justify-center items-center text-center bg-gray-1 text-gray-6'>
-                      <button className='button_footer' type='submit'>
+                    <button className={`button_footer ${(!formik.isValid || !formik.dirty) ? 'disabled' : ''}`}type='submit' 
+                    disabled={!formik.isValid || !formik.dirty}
+                    >
                         <p className='uppercase'>Save And Next</p>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
                           <path fillRule="evenodd" d="M3.75 12a.75.75 0 01.75-.75h13.19l-5.47-5.47a.75.75 0 011.06-1.06l6.75 6.75a.75.75 0 010 1.06l-6.75 6.75a.75.75 0 11-1.06-1.06l5.47-5.47H4.5a.75.75 0 01-.75-.75z" clipRule="evenodd" />
