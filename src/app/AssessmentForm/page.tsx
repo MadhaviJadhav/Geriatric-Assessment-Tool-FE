@@ -1,8 +1,14 @@
+'use client'
+
+import { useState } from 'react'
 import AssessmentForm1 from './AssessmentForm1/page'
-export default function page(){
-    return(
+import ProtectedRoute from '../_components/ProtectedRoute';
+export default function page() {
+    return (
         <>
-        <AssessmentForm1/>
+            <ProtectedRoute>
+                <AssessmentForm1 />
+            </ProtectedRoute>
         </>
     )
 }

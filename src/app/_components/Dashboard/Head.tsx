@@ -1,11 +1,9 @@
-import '../../../styles/global.css'
-
 interface Head1Props {
     name: string;
     links: string;
   }
    
-const  Head1 =  ({ name, links }:Head1Props) =>
+const  Head =  ({ name, links}:Head1Props) =>
 {
     return (
         <>
@@ -16,4 +14,4 @@ const  Head1 =  ({ name, links }:Head1Props) =>
         </>
     )
 }
-export default Head1;
+export default Head;

@@ -5,6 +5,7 @@ import CheckBox from './CheckBox'
 import Selection from './Select'
 import DatePicker from './DatePicker'
 import DateHandle from './DateHandle'
+import RadioHor from './RadioHor'
 import datePick from './datePick'
 
 const FormikControl = (props) => {
@@ -26,7 +27,9 @@ const FormikControl = (props) => {
         case 'date1':
             return <DateHandle {...rest}/>
         case 'date2':
-            return <datePick {...rest}/>    
+            return <datePick {...rest}/>  
+        case 'radioHor':
+            return <RadioHor {...rest}/>      
         default: return null    
     }
 

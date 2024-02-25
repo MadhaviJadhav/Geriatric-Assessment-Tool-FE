@@ -1,13 +1,20 @@
+import { ReactNode } from "react"
+import ProtectedRoute from "../_components/ProtectedRoute"
 
-export function metadata(){
-    return{
-        title: 'Assessment Form'
-    }
+// export function metadata(){
+//     return{
+//         title: 'Assessment Form'
+//     }
+//   }
+
+  interface props{
+    children:ReactNode
   }
-export default function Layout({children}) {
+export default function Layout({children}:props) {
     
     return (
-        <>
+        <ProtectedRoute>
+            <>
             <div className="w-full h-full">
                 
             <header>
@@ -36,5 +43,6 @@ export default function Layout({children}) {
 {children}
             </div>
         </>
+        </ProtectedRoute>
     )
 }

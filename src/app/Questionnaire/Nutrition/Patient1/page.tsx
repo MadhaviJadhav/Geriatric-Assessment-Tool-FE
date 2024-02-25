@@ -1,10 +1,10 @@
 "use client"
 
-import HeadComp from "../../HeadComp"
+import HeadComp from "@/app/_components/Questionnaire/Head"
 import { ErrorMessage, Form, Formik } from "formik"
 import * as Yup from 'yup'
 import FormikControl from "@/formik/FormikControl"
-import Question from "../QuestionComp"
+import Question from "@/app/_components/Questionnaire/Nutrition/Question"
 import TextError from "@/formik/TextError"
 
 

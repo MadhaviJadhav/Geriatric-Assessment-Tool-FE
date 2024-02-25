@@ -2,9 +2,8 @@
 
 import { Formik } from "formik"
 import * as Yup from 'yup'
-import HeadComp from "../../HeadComp"
-import Question from "../QuestionComp"
-import '../../../../../styles/global.css'
+import HeadComp from "@/app/_components/Questionnaire/Head"
+import Question from "@/app/_components/Questionnaire/MentalHealth/Question"
 
 
 const initialValues = {

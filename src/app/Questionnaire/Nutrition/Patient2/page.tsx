@@ -1,9 +1,9 @@
 "use client"
 
-import HeadComp from "../../HeadComp"
+import HeadComp from "@/app/_components/Questionnaire/Head"
 import { Formik, Form, ErrorMessage } from "formik"
 import * as Yup from 'yup'
-import Question from "../QuestionComp"
+import Question from "@/app/_components/Questionnaire/Nutrition/Question"
 import FormikControl from "@/formik/FormikControl"
 import TextError from "@/formik/TextError"
 import '../../../../../styles/global.css'

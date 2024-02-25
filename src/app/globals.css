@@ -2,3 +2,247 @@
 @tailwind components;
 @tailwind utilities;
 
+.step-item {
+    @apply relative flex flex-col  w-36 text-[12px];
+}
+
+/* .radio{
+    @apply relative   w-36 text-[12px];
+}
+.radio::before {
+    @apply content-[''] bg-gray-1 absolute w-[60%] h-[1px] right-[102%] top-[19%] -translate-y-1/2; */
+/* } */
+body {
+  /* font-family: 'Times New Roman', Times, serif; */
+}
+
+.box {
+  width: 100%;
+  height: 48px;
+  position: relative;
+  background-color: #F2F2F2;
+  /* box-shadow:0 4px 6px 1px rgb(0 0 0 / 0.1), 0 2px 4px 1px rgb(0 0 0 / 0.1); */
+  box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2);
+}
+
+.label_box {
+  position: absolute;
+  width: 60%;
+  left: 16px;
+  top: -8px;
+  color: #828282;
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.input_box {
+  background-color: #F2F2F2;
+  position: absolute;
+  left: 16px;
+  top: 14px;
+  width: 80%;
+}
+
+.error {
+  color: rgb(239 68 68);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.button {
+  text-align: center;
+  height: 48px;
+  width: 50%;
+  background-color: #F2F2F2;
+  text-transform: uppercase;
+}
+.button-active{
+  background-color: hsl(0, 0%, 74%);
+  border: 2px solid #333333;
+}
+.button1-active{
+  background-color: hsl(0, 0%, 74%);
+  border: 2px solid #333333;
+}
+.button1 {
+  text-align: center;
+  height: 48px;
+  width: 33%;
+  background-color: #F2F2F2;
+  text-transform: uppercase;
+}
+.verBox{
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)
+}
+/* .button1:hover {
+  background-color: #BDBDBD;
+  border: 2px solid #333333;
+}
+.button1:focus{
+  background-color: hsl(0, 0%, 74%);
+  border: 2px solid #333333;
+} */
+/* .button:hover {
+  background-color: #BDBDBD;
+  border: 2px solid #333333;
+} */
+
+/* .button:focus {
+  background-color: hsl(0, 0%, 74%);
+  border: 2px solid #333333;
+}
+
+.button:active {
+  background-color: hsl(0, 0%, 74%);
+  border: 2px solid #333333;
+} */
+
+.button_footer {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  height: 48px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.button_footer.disabled {
+  /* Styles for the disabled state go here */
+  background-color: #bdc3c7;
+  color: #7f8c8d;
+  cursor: not-allowed;
+}
+
+/* text-gray-1 text-sm underline hover:no-underline capitalize */
+.link {
+  color: #333;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  text-decoration: underline;
+  text-transform: capitalize;
+}
+
+.link:hover {
+  text-decoration: none;
+}
+
+@media only screen and (max-width: 350px) {
+  .section {
+     /* flex-direction: column; */
+  }
+}
+
+.range_box::-webkit-slider-thumb {
+  background-color: #333333;
+  /* Change the color to your desired color */
+}
+
+/* Firefox */
+/* Add these styles to your global or component-level CSS (or SCSS) file */
+.range-input{
+  background: #E0E0E0;
+  -webkit-appearance: none;
+  /* border-radius: 20px; */
+  height: 5px;
+}
+/* .range-input::-webkit-scrollbar-track-piece{
+  background: #333333;
+} */
+.range-input::-webkit-slider-thumb{
+  /* -webkit-appearance: none; */
+ appearance: none;
+ width: 16px;
+ height: 16px;
+ border-radius: 50%;
+ border: none;
+ background: #333333;
+ cursor: pointer;
+ 
+  /* appearance: none; */
+}
+.range-input::-moz-range-thumb {
+  background-color: #333333;
+}
+
+.range-input::-moz-range-progress {
+  background-color: #333333;
+}
+/* input[type="range"]
+{
+  -webkit-appearance: none;
+   transition: all ease 100ms;
+   height: var(--thumb-height);
+   position: relative;
+   background: #fff0;
+   overflow: hidden;
+   color: #ef233c;
+   --thumb-height: 1.125em;
+   --track-height: 0.125em;
+   --track-color: rgba(0, 0, 0, 0.2);
+   --brightness-hover: 180%;
+   --brightness-down: 80%;
+   --clip-edges: 0.125em;
+} */
+.range-input::range-progress{
+  background-color: #333333;
+}
+.range-input::-webkit-progress-inner-element{
+  background-color: #333333;
+}
+
+.range-input::-webkit-progress {
+  background:hsl(0, 0%, 20%);
+}
+
+
+
+
+.button-active{
+    @apply bg-gray-4;
+}
+
+.step-item:not(:first-child):before {
+    @apply content-[''] bg-gray-1 absolute w-[60%] h-[1px] right-[102%] top-[19%] -translate-y-1/2;
+}
+
+.step {
+    @apply w-8 h-8 flex z-10 relative border-2 border-gray-1 rounded-full font-semibold text-black justify-center items-center;
+}
+
+.active .step {
+    @apply bg-gray-1;
+}
+
+.complete .step {
+    @apply bg-gray-1;
+}
+
+
+.slick-list, .slick-slider, .slick-track{
+    padding: 1rem 0;
+  }
+  
+  .center .slick-center {
+    transform: scale(1.3);
+    z-index: 10000;
+    transition: all 400ms ease-in-out;
+    pointer-events: all;
+    opacity: 1;
+  }
+  
+  .center {
+    opacity: 0.7;
+    pointer-events: none;
+  }
+  
+  @media(max-width: 990px){
+    .center .slick-center {
+      transform: scale(1);
+    }
+  
+    .center {
+      opacity: 1;
+      pointer-events: all;
+    }
+  }

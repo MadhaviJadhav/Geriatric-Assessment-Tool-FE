@@ -5,42 +5,64 @@ import { Formik, Form, ErrorMessage } from 'formik'
 import { useRouter } from 'next/navigation'
 import FormikControl from '@/formik/FormikControl'
 import TextError from '@/formik/TextError'
+import axios from 'axios'
+import { ApiConstants } from '@/api/ApiConstants'
+import custom_axios from '@/axios/AxiosSetup'
 
 
 const initialValues = {
-  date_seen: "",
-  mrn_number: "",
-  patient_name: "",
+  consultingDate: "",
+  MRN: "",
+  patientName: "",
   age: "",
   gender: "",
-  GT: "",
+  isCancerResearch: "",
+  uniqueToken:localStorage.getItem("token")
 
 }
 
 const validationSchema = Yup.object({
-  date_seen: Yup.date().typeError('Invalid date format').required('Please Enter the vaild date').nullable(),
-  mrn_number: Yup.string().required('MRN number is Required'),
-  patient_name: Yup.string().min(2).max(25).matches(/^[a-zA-Z ]+$/, 'Name must only contain character').required("Please Enter the name"),
+  consultingDate: Yup.date().typeError('Invalid date format').required('Please Enter the vaild date').nullable(),
+  MRN: Yup.string().required('MRN number is Required'),
+  patientName: Yup.string().min(2).max(25).matches(/^[a-zA-Z ]+$/, 'Name must only contain character').required("Please Enter the name"),
   age: Yup.number().typeError('Age must be a Number').integer().positive().required('Age is Required'),
   gender: Yup.string().oneOf(['Female', 'Male']).required('Select the Gender'),
-  GT: Yup.boolean().oneOf([false, true], 'Select the Geriatice Trial').required('Select the Geriatice Trial')
+  isCancerResearch: Yup.string().oneOf(['Yes', 'No']).required('Select the Geriatice Trial')
 
 })
 export default function page() {
 
   const router = useRouter()
+  
+  const Headers = {
+    'Authorization': 'Bearer ' + localStorage.getItem("token"), // Replace with your actual JWT token
+    'Content-Type': 'application/json', // Adjust the content type as needed
+  };
   return (
 
     <>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={(values) => {
-          console.log(values)
-          router.push('/AssessmentForm/AssessmentForm2')
+        onSubmit={async (values) => {
+          try {
+            // Send a POST request to your NestJS API endpoint
+            console.log("ghjk")
+            const response = await axios.post("http://localhost:3001/patient", values, {
+              headers:Headers
+            })
+            
+            console.log('Patient created:', response.data);
+            const patientId = response.data.id;
+            router.push(`/AssessmentForm/AssessmentForm2?patientId=${patientId}`);
+          } catch (error) {
+            
+            console.error('Error creating patient:', error);
+          }
         }}
       >
         {formik => {
+          // console.log(formik)
           return (
             <Form>
               <div className='w-full h-full'>
@@ -57,13 +79,13 @@ export default function page() {
                       </div>
                       <div className='box'>
                         <label htmlFor="Date Seen" className='label_box'>Date Seen</label>
-                        <FormikControl control='date' name="date_seen" id="date_seen" className='input_box'
+                        <FormikControl control='date' name="consultingDate" id="consultingDate" className='input_box'
                         />
 
 
                       </div>
                       <div className='box'>
-                        <FormikControl control='input' type="text" name="mrn_number" id="mrn_number" className='input_box' placeholder='Medical Record Number(MRN)'
+                        <FormikControl control='input' type="text" name="MRN" id="MRN" className='input_box' placeholder='Medical Record Number(MRN)'
 
                         />
 
@@ -72,7 +94,7 @@ export default function page() {
                       </div>
                       <div className='box'>
                         <label htmlFor="Patient's Name" className='label_box'>Patient's Name</label>
-                        <FormikControl control='input' type="text" name="patient_name" id="patient_name" className='input_box' />
+                        <FormikControl control='input' type="text" name="patientName" id="patientName" className='input_box' />
 
                       </div>
                       <div className='box'>
@@ -90,10 +112,10 @@ export default function page() {
                             {/* <div className=''> */}
                             <button type='button' name='gender' onClick={() => {
                               formik.setFieldValue('gender', 'Female');
-                            }} className='button'>Female</button>
+                            }} className={`button ${formik.values.gender === 'Female' ? 'button-active' : ''}`}>Female</button>
                             <button type='button' name='gender' onClick={() => {
                               formik.setFieldValue('gender', 'Male');
-                            }} className='button'>Male</button>
+                            }} className={`button ${formik.values.gender === 'Male' ? 'button-active' : ''}`}>Male</button>
                             {/* </div> */}
                           </div>
                         </div>
@@ -112,18 +134,18 @@ export default function page() {
                           <p>Is this patient a part of the geriatric cancer research?</p>
                         </div>
                         <div className='h-[48px] flex gap-4 text-gray-1 font-medium'>
-                          <button type='button' name='GT' onClick={() => {
-                            formik.setFieldValue('GT', true);
+                          <button type='button' name='isCancerResearch' onClick={() => {
+                            formik.setFieldValue('isCancerResearch', 'Yes');
                             // console.log("HII")
-                          }} className='button'>Yes</button>
-                          <button type='button' name='GT' onClick={() => {
-                            formik.setFieldValue('GT', false);
-                          }} className='button'>No</button>
+                          }} className={`button ${formik.values.isCancerResearch === 'Yes' ? 'button-active' : ''}`}>Yes</button>
+                          <button type='button' name='isCancerResearch' onClick={() => {
+                            formik.setFieldValue('isCancerResearch', 'No');
+                          }} className={`button ${formik.values.isCancerResearch === 'No' ? 'button-active' : ''}`}>No</button>
                         </div>
 
                       </div>
                     </div>
-                    <ErrorMessage name='GT' component={TextError} />
+                    <ErrorMessage name='isCancerResearch' component={TextError} />
                   </div>
 
                   {/* <Footer/> */}

@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import Head1 from "../HeadComp";
-import Question from "../QuestionComp";
+import Head1 from "@/app/_components/Questionnaire/Head";
+import Question from "@/app/_components/Questionnaire/Question";
 import FormikControl from "@/formik/FormikControl";
 import { Form, Formik } from "formik";
 import * as Yup from 'yup';

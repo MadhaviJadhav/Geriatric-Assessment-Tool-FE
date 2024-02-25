@@ -1,11 +1,12 @@
 "use client"
 
-import HeadComp from "../HeadComp"
+import HeadComp from "@/app/_components/Questionnaire/Head"
 import { ErrorMessage, Form, Formik } from "formik"
 import * as Yup from 'yup'
 import FormikControl from "@/formik/FormikControl"
-import Question from "../QuestionComp"
+import Question from "@/app/_components/Questionnaire/Nutrition/Question"
 import TextError from "@/formik/TextError"
+import "../../../../styles/global.css"
 
 
 
@@ -31,13 +32,14 @@ const initialValues = {
     decreasedFood: '',
     weightLoss: '',
     mobilityLevel:'',
+    acuteDiease:""
 }
 
 const validationSchema = Yup.object({
     decreasedFood: Yup.string().required('Required'),
     weightLoss: Yup.string().required('Required'),
     mobilityLevel:Yup.string().required('Required'),
-    acuteDiease:Yup.boolean().oneOf([true,false],'Please Choose it').required('Required'),
+    acuteDiease:Yup.string().oneOf(['Yes','No'],'Please Choose it').required('Required'),
 })
 export default function page() {
     return (
@@ -56,7 +58,7 @@ export default function page() {
                     console.log(values)
                 }}>
 
-                {(formikProps) => {
+                {(formik) => {
                     return (
                         <Form>
                             <div className="flex flex-col gap-7 mt-6">
@@ -95,10 +97,10 @@ export default function page() {
 
                                     <div className="px-5">
                                         <div className="flex gap-4">
-                                            <button type="button" className="button" onClick={()=>
-                                            formikProps.setFieldValue('acuteDiease',true)}>Yes</button>
-                                            <button type="button" className="button" onClick={()=>
-                                            formikProps.setFieldValue('acuteDiease',false)}>No</button>
+                                            <button type="button" className={`button ${formik.values.acuteDiease === 'Yes' ? 'button-active' : ''}`}onClick={()=>
+                                            formik.setFieldValue('acuteDiease','Yes')}>Yes</button>
+                                            <button type="button" className={`button ${formik.values.acuteDiease === 'No' ? 'button-active' : ''}`}onClick={()=>
+                                            formik.setFieldValue('acuteDiease','No')}>No</button>
                                             {/* <ErrorMessage component={TextError} name="acuteDiease" /> */}
                                         </div>
                                     </div>

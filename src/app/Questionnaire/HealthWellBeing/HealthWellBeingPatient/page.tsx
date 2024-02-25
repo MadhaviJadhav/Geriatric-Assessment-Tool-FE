@@ -1,9 +1,9 @@
 "use client"
 
-import Head1 from "../../HeadComp"
+import Head1 from "@/app/_components/Questionnaire/Head"
 import { Formik, Form, Field, ErrorMessage } from "formik"
 import * as Yup from 'yup';
-import Question from "../../QuestionComp";
+import Question from "@/app/_components/Questionnaire/Question";
 import '../../../../../styles/global.css'
 import { useRouter } from "next/navigation";
 import TextError from "@/formik/TextError";
@@ -14,7 +14,7 @@ import TextError from "@/formik/TextError";
 // ]
 const initialValues = {
     option1: false,
-    lessPhoneUse: '',
+    lessPhoneUse: "",
     shy: '',
     feelIrritable: '',
     feelFrustrated: '',
@@ -100,13 +100,13 @@ export default function page() {
                                             marathi="ऐकण्याच्या समस्येमुळे तुम्ही तुमच्या इच्छेपेक्षा कमी वेळा फोन वापरता का?" />
 
                                         <div className="h-[48px] flex gap-4 text-gray-1 font-medium">
-                                            <button className="button1" type='button' name='lessPhoneUse' onClick={() => {
+                                            <button className={`button1 ${formik.values.lessPhoneUse === 'Yes' ? 'button1-active' : ''}`}  type='button' name='lessPhoneUse' onClick={() => {
                                                 formik.setFieldValue('lessPhoneUse', 'Yes')
                                             }}>Yes</button>
-                                            <button className="button1" type='button' name='lessPhoneUse' onClick={() => {
+                                            <button className={`button1 ${formik.values.lessPhoneUse === 'Sometimes' ? 'button1-active' : ''}`}  type='button' name='lessPhoneUse' onClick={() => {
                                                 formik.setFieldValue('lessPhoneUse', 'Sometimes')
                                             }}>Sometimes</button>
-                                            <button className="button1" type='button' name='lessPhoneUse' onClick={() => {
+                                            <button className={`button1 ${formik.values.lessPhoneUse === 'No' ? 'button1-active' : ''}`}  type='button' name='lessPhoneUse' onClick={() => {
                                                 formik.setFieldValue('lessPhoneUse', 'No')
                                             }}>No</button>
                                         </div>
@@ -121,13 +121,13 @@ export default function page() {
                                             marathi="नवीन लोकांना भेटताना ऐकण्याच्या समस्येमुळे तुम्हाला लाज वाटते का?" />
 
                                         <div className="h-[48px] flex gap-4 text-gray-1 font-medium">
-                                            <button className="button1" type='button' name='shy' onClick={() => {
+                                            <button className={`button1 ${formik.values.shy === 'Yes' ? 'button1-active' : ''}`}  type='button' name='shy' onClick={() => {
                                                 formik.setFieldValue('shy', 'Yes')
                                             }}>Yes</button>
-                                            <button className="button1" type='button' name='shy' onClick={() => {
+                                            <button className={`button1 ${formik.values.shy === 'Sometimes' ? 'button1-active' : ''}`}  type='button' name='shy' onClick={() => {
                                                 formik.setFieldValue('shy', 'Sometimes')
                                             }}>Sometimes</button>
-                                            <button className="button1" type='button' name='shy' onClick={() => {
+                                            <button className={`button1 ${formik.values.shy === 'No' ? 'button1-active' : ''}`}  type='button' name='shy' onClick={() => {
                                                 formik.setFieldValue('shy', 'No')
                                             }}>No</button>
                                         </div>
@@ -141,13 +141,13 @@ export default function page() {
                                             marathi="ऐकण्याच्या समस्येमुळे तुम्ही लोकांचे गट टाळता का?  ऐकण्याच्या समस्येमुळे तुम्हाला चिडचिड होते का?" />
 
                                         <div className="h-[48px] flex gap-4 text-gray-1 font-medium">
-                                            <button className="button1" name='feelIrritable' type='button' onClick={() => {
+                                            <button className={`button1 ${formik.values.feelIrritable === 'Yes' ? 'button1-active' : ''}`}  name='feelIrritable' type='button' onClick={() => {
                                                 formik.setFieldValue('feelIrritable', 'Yes')
                                             }}>Yes</button>
-                                            <button className="button1" name='feelIrritable' type='button' onClick={() => {
+                                            <button className={`button1 ${formik.values.feelIrritable === 'Sometimes' ? 'button1-active' : ''}`}  name='feelIrritable' type='button' onClick={() => {
                                                 formik.setFieldValue('feelIrritable', 'Sometimes')
                                             }}>Sometimes</button>
-                                            <button className="button1" name='feelIrritable' type='button' onClick={() => {
+                                            <button className={`button1 ${formik.values.feelIrritable === 'No' ? 'button1-active' : ''}`}  name='feelIrritable' type='button' onClick={() => {
                                                 formik.setFieldValue('feelIrritable', 'No')
                                             }}>No</button>
                                         </div>
@@ -161,13 +161,13 @@ export default function page() {
                                             marathi="ऐकण्याच्या समस्येमुळे तुमच्या कुटुंबातील सदस्यांशी बोलताना तुम्हाला निराशा वाटते का?" />
 
                                         <div className="h-[48px] flex gap-4 text-gray-1 font-medium">
-                                            <button className="button1" name='feelFrustrated' type='button' onClick={() => {
+                                            <button className={`button1 ${formik.values.feelFrustrated === 'Yes' ? 'button1-active' : ''}`}  name='feelFrustrated' type='button' onClick={() => {
                                                 formik.setFieldValue('feelFrustrated', 'Yes')
                                             }}>Yes</button>
-                                            <button className="button1" name='feelFrustrated' type='button' onClick={() => {
+                                            <button className={`button1 ${formik.values.feelFrustrated === 'Sometimes' ? 'button1-active' : ''}`}  name='feelFrustrated' type='button' onClick={() => {
                                                 formik.setFieldValue('feelFrustrated', 'Sometimes')
                                             }}>Sometimes</button>
-                                            <button className="button1" name='feelFrustrated' type='button' onClick={() => {
+                                            <button className={`button1 ${formik.values.feelFrustrated === 'No' ? 'button1-active' : ''}`}  name='feelFrustrated' type='button' onClick={() => {
                                                 formik.setFieldValue('feelFrustrated', 'No')
                                             }}>No</button>
                                         </div>

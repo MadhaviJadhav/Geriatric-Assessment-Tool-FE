@@ -12,8 +12,8 @@ import Money from '../../../../public/Images/Money.jpeg'
 
 import { Form, Formik } from "formik"
 import * as Yup from 'yup'
-import HeadComp from "../HeadComp"
-import Question from "./QuestionComp"
+import HeadComp from "@/app/_components/Questionnaire/Head"
+import Question from "@/app/_components/Questionnaire/ActivityAndMobility/Question"
 import FormikControl from "@/formik/FormikControl"
 
 const telephoneUse = [

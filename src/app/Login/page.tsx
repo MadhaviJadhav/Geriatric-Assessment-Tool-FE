@@ -1,5 +1,8 @@
 "use client"
 
+import { ApiConstants } from '@/api/ApiConstants';
+import axios from 'axios';
+import { invalid } from 'moment';
 import { useRouter } from 'next/navigation'
 import { useState } from 'react';
 
@@ -7,14 +10,28 @@ import { useState } from 'react';
 
 export default function Login() {
   const router = useRouter()
-  const [doctorId, setDoctorId] = useState<string>("")
+  const [doctorId, setdoctorId] = useState<string>("")
   const [password, setPassword] = useState<string>("")
 
-  const handleSubmit = () => {
-    if (doctorId && password) {
-      router.push("/Dashboard")
-    } else {
-      alert("Doctor Id or password is incorrect")
+  const handleSubmit = async () => {
+    if(doctorId=="" || password=="")
+    {
+      alert("Please fill the values")
+      return null
+    }
+
+
+    try {
+      const response = await axios.post(`http://localhost:3001${ApiConstants.LOGIN}`, { doctorId, password });
+
+      localStorage.setItem("token", response.data)
+      console.log("Login Sucessful", response.data)
+      router.push('/Dashboard')
+    }
+    catch (error) {
+      alert("Invalid user")
+      localStorage.removeItem("token")
+      console.log("Error..", error)
     }
   }
 
@@ -25,8 +42,8 @@ export default function Login() {
         <div className='flex flex-col w-3/4 h-3/4'>
           <div className="input flex flex-col gap-5">
 
-            <input className='text-start p-3 self-center bg-gray-6 text-gray-4 w-full h-1/2 font-normal focus:outline-none shadow-md' type="text" name='username' placeholder="Doctor's ID" onChange={(e) => {
-              setDoctorId(e.target.value)
+            <input className='text-start p-3 self-center bg-gray-6 text-gray-4 w-full h-1/2 font-normal focus:outline-none shadow-md' type="text" name='doctorId' placeholder="Doctor's ID" onChange={(e) => {
+              setdoctorId(e.target.value)
             }} />
             <input className='text-start p-3 self-center bg-gray-6 text-gray-4 w-full h-1/2 font-normal focus:outline-none shadow-md' type="Password" name='password' placeholder='Password' onChange={(e) => {
               setPassword(e.target.value)
