@@ -128,7 +128,13 @@ export default function Verification() {
                     <div className='h-[80px] py-4 flex gap-4 w-full px-7 py-4 text-sm font-medium shadow-inner absolute bottom-0'>
                         <div className='w-full h-[48px] flex justify-center items-center text-center bg-gray-1 text-gray-6'>
                             <button className="button_footer" type='submit' onClick={() => {
-                                router.push('/Questionnaire')
+                                if(isVerified)
+                                {
+                                    router.push(`/Questionnaire?patientId=${patientId}`)
+                                }
+                                else{
+                                    router.push('/Verification')
+                                }
                             }}>
                                 <p className='uppercase'>Next</p>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">

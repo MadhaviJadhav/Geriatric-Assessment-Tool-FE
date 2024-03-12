@@ -6,9 +6,9 @@ import FormikControl from "@/formik/FormikControl";
 import { Form, Formik } from "formik";
 import * as Yup from 'yup';
 
-import '../../../../styles/global.css'
-import { root } from 'postcss';
-import { useRouter } from 'next/navigation';
+
+import { useRouter, useSearchParams } from 'next/navigation';
+import axios from 'axios';
 
 const initialValues = {
   pain: 0,
@@ -32,18 +32,143 @@ const validationSchema = Yup.object({
   tiredness: Yup.number().required('Required'),
 });
 
+interface Subquestions {
+  name: string,
+  subquestionid: number;
+  questionType: string;
+  min: number;
+  max: number;
+  minLabel?: string;
+  maxLabel?: string;
+  meaning?: string;
+}
+interface QuestionData {
+  questionId: number;
+  questionEnglish: string;
+  questionMarathi: string;
+  questionType: string;
+  questionOptions: string[];
+  name: string;
+  subquestions: Subquestions[];
+}
+
+interface Section {
+  sectionId: number;
+  sectionName: string;
+  sectionDescribtion: string;
+}
+
 export default function page() {
   const router = useRouter();
+
+  const searchParams = useSearchParams();
+  const sectionId = searchParams.get('sectionId');
+
+  const [sectionData, setSectionData] = useState<Section>()
+  const [completedQuestions, setCompletedQuestions] = useState(0);
+  const [answeredQuestions, setAnsweredQuestions] = useState([]);
+
+  const [questionSet, setQuestionSet] = useState<QuestionData[]>([])
+
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3001/question-master/${sectionId}`)
+
+        console.log(response.data)
+        setQuestionSet(response.data)
+      }
+      catch (error) {
+        console.log(error)
+      }
+    }
+    fetchQuestions();
+  }, [])
+  // console.log()
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`http://localhost:3001/section-master/${sectionId}`);
+      // console.log(response.data);
+      return response.data;
+      // setSectionData(response.data)
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  console.log("question ", questionSet)
+  useEffect(() => {
+    // fetchData();
+    fetchData().then((data) => setSectionData(data))
+  }, []);
+  // console.log(sectionData)
+  const sectionName = sectionData?.sectionName || 'Unknown';
+
+  const updateProgress = (questionIndex: number, subquestionIndex: number) => {
+    // Check if the question and subquestion are not already in the answeredQuestions array
+    const questionKey = `${questionIndex}_${subquestionIndex}`;
+    if (!answeredQuestions.includes(questionKey)) {
+      setCompletedQuestions((prevCount) => prevCount + 1);
+      setAnsweredQuestions((prevAnswers) => [...prevAnswers, questionKey]);
+    }
+  };
+
+
+  const sendAnswerToServer = async (questionId: number, subquestionId:number, answer: string) => {
+    try {
+      // Assuming you have an API endpoint for storing answers
+      await axios.post("http://localhost:3001/patient-question-tracker", {
+        questionId: questionId,
+        sectionId: sectionId,
+        // subquestion: {
+          subquestionId: subquestionId,
+          answer: answer,
+        // },
+      });
+
+      console.log(`Answer for question ${questionId} successfully stored!`);
+    } catch (error) {
+      console.error(`Error storing answer for question ${questionId}:`, error);
+    }
+  };
+
+  const submitForm = async (values) => {
+    for (let i = 0; i < questionSet.length; i++) {
+      const questionId = questionSet[i].questionId;
+  
+      for (let j = 0; j < questionSet[i].subquestions.length; j++) {
+        const subquestionId = questionSet[i].subquestions[j].subquestionid;
+        const answer = values[questionSet[i].subquestions[j].name];
+  
+        await sendAnswerToServer(questionId, subquestionId, answer);
+        console.log("answer : ", answer);
+      }
+    }
+
+    try {
+      await axios.post("http://localhost:3001/patient-section-master", {
+        patientId: 1,
+        sectionId: sectionId,
+        completedStatus: Math.round((completedQuestions / questionSet.length) * 5),
+      });
+
+      console.log(`Patient's section tracker for section ${sectionId} updated!`);
+    } catch (error) {
+      console.error(`Error updating patient's section tracker:`, error);
+    }
+
+  };
+
   const [wid, setWid] = useState(Number(window.innerWidth / 10))
   useEffect(() => {
     setWid(window.innerWidth / 10)
   })
+  const progress = Math.round((completedQuestions / questionSet.length)*10);
   return (
-    
+
     <>
       <div>
         <div className="mt-5">
-          <Head1 name="Health and Well Being" count="2" progress="80%" />
+          <Head1 name={sectionName} count={sectionId} progress={progress} />
         </div>
 
         <Formik
@@ -51,8 +176,9 @@ export default function page() {
           validationSchema={validationSchema}
           onSubmit={(values) => {
             // Handle form submission here
-            console.log(values);
-            router.push('/Questionnaire/HealthWellBeing/HealthWellBeingPatient')
+            submitForm(values)
+            // console.log(values);
+            router.push(`/Questionnaire/Health-and-Well-Being/Health-and-Well-Being2?sectionId=${sectionId}`)
           }}
         >
           {(formik) => {
@@ -60,8 +186,71 @@ export default function page() {
 
             return (
               <Form>
-                <div className='flex flex-col gap-14'>
-                  <Question
+                <div className='flex flex-col gap-14 mt-8'>
+
+                  {questionSet.slice(0,1).map((question, index) => {
+                    return (
+                      <div>
+                        <div
+                        >
+                          <Question english={question.questionEnglish} marathi={question.questionMarathi} />
+
+                          <div className='flex flex-col gap-16 mt-12'>
+
+                            {question.subquestions.map((subquestion, subIndex) => {
+                              return (
+
+                                <div className='flex flex-col gap-6'>
+                                  <div className='px-5 flex flex-col gap-2'>
+                                    <div className=' relative'>
+                                      <p
+                                        key={subquestion.name}
+                                        className='w-[34px] h-6 text-center border-2 border-gray-5 flex justify-center item-center rounded absolute top-[-2.5rem]'
+                                        style={{ left: `${(formik.values)[subquestion.name] * Number(wid) - formik.values[subquestion.name]}px` }}
+                                      >
+                                        {formik.values[subquestion.name]}
+                                      </p>
+                                    </div>
+                                    <div className='h-8 w-full'>
+                                      <FormikControl
+                                        control='input'
+                                        type={subquestion.questionType}
+                                        id={subquestion.name}
+                                        name={subquestion.name}
+                                        min={subquestion.min}
+                                        max={subquestion.max}
+                                        className="range-input text-center w-full"
+                                        onChange={(e) => {
+                                          formik.handleChange(e);
+                                                                formik.setFieldValue(question.name, e.target.value);
+                                          updateProgress(index, subIndex);
+                                        }}
+                                      />
+                                    </div>
+
+                                    <div className='flex justify-between text-neutral-600 text-xs font-normal  capitalize'>
+                                      <p>{subquestion.minLabel}</p>
+                                      <div className='flex flex-col'>
+                                        <p>{subquestion.maxLabel}</p>
+                                        <p className='text-[10px]'>{subquestion.meaning}</p>
+                                      </div>
+
+                                    </div>
+
+                                  </div>
+                                  <hr />
+                                </div>
+
+                              )
+                            })}
+                          </div>
+
+                        </div>
+                      </div>
+                    )
+                  })}
+
+                  {/* <Question
                     english="Please select the number that best describes how you’re feeling right now."
                     marathi="कृपया तुम्हाला आत्ता कसे वाटत आहे याचे सर्वोत्तम वर्णन करणारा नंबर निवडा."
                   />
@@ -299,7 +488,7 @@ export default function page() {
                       </div>
                     </div>
                   </div>
-                  <hr />
+                  <hr /> */}
                   <div className='h-[80px] py-4  flex gap-4 w-full px-7 py-4 text-sm font-medium  shadow-inner mt-4'>
                     <div className='w-1/3  h-[48px] flex justify-center items-center text-center bg-gray-6 text-gray-1'>
                       <button type='submit' className='button_footer'>
@@ -311,9 +500,9 @@ export default function page() {
                       </button>
                     </div>
                     <div className='w-8/12 h-[48px] flex justify-center items-center text-center bg-gray-1 text-gray-6'>
-                    <button className={`button_footer ${(!formik.isValid || !formik.dirty) ? 'disabled' : ''}`}type='submit' 
-                    disabled={!formik.isValid || !formik.dirty}
-                    >
+                      <button className={`button_footer ${(!formik.isValid || !formik.dirty) ? 'disabled' : ''}`} type='submit'
+                        disabled={!formik.isValid || !formik.dirty}
+                      >
                         <p className='uppercase'>Save And Next</p>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
                           <path fillRule="evenodd" d="M3.75 12a.75.75 0 01.75-.75h13.19l-5.47-5.47a.75.75 0 011.06-1.06l6.75 6.75a.75.75 0 010 1.06l-6.75 6.75a.75.75 0 11-1.06-1.06l5.47-5.47H4.5a.75.75 0 01-.75-.75z" clipRule="evenodd" />

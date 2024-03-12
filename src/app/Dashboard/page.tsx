@@ -10,9 +10,10 @@ import Slider from "react-slick";
 import { patientApi1 } from "@/api/dashboard/patientAPi";
 import ProtectedRoute from "../_components/ProtectedRoute";
 import axios from "axios";
+import Link from 'next/link';
 
 interface Patient {
-  patientId: number;
+  id: number;
   patientName: string;
   age:number,
   gender:number,
@@ -130,7 +131,7 @@ export default function Dashboard() {
       <div className="w-full h-full mt-5 flex flex-col gap-3 relative">
         <div className="w-full h-1/10">
           <div className="h-1/10 mx-5  flex flex-col gap-2">
-            <Head name="Patients" links="See All" />
+            <Head name="Patients" links="See All" to='#'/>
 
             <div className=" h-24  flex  w-full justify-between bg-gray-6 justify-between">
               <div className=" w-1/6 h-18 bg-white m-3">
@@ -165,21 +166,24 @@ export default function Dashboard() {
         </div>
         <div className="w-full h-1/10  ">
           <div className="h-1/10 mx-5  flex flex-col gap-2">
-            <Head name="New Admission" links="See All" />
+            <Head name="New Admission" links="See All" to='#'/>
             <div className="relative">
               <Slider ref={arrowRef} {...settings} className="flex gap-[80px]">
 
                 {patientData.map((patient) => {
                   return (
                     
-                      <div key={patient.patientId} className="flex gap-1 w-[247px] h-[83px] ">
+                      <div key={patient.id} className="flex gap-1 w-[247px] h-[83px] ">
                         <div className="w-[247px] h-[83px] bg-gray-6 flex flex-col  gap-1 ">
                           <div className="flex  justify-between mt-1">
+                            <Link href={`/Dashboard/Dashboard2?patientId=${patient.id}`}>
                             <p className="w-[122px] h-[17px] text-sm font-semibold ml-2">{patient.patientName}</p>
+                            </Link>
+
                             <p className=" w-[89px] h-[15px] text-gray-3 text-xs font-normal">{moment(patient.consultingDate).format('ddd, HH:mm A')}</p>
                           </div>
                           <div>
-                            <p className="text-gray-1 text-sm font-normal ml-2">patient: {patient.patientId}, {patient.age}, {patient.gender}</p>
+                            <p className="text-gray-1 text-sm font-normal ml-2">ID: {patient.id}, {patient.age}, {patient.gender}</p>
                           </div>
                           <div className="w-[247px] h-[0px] border border-gray-5"></div>
                           <div className="flex justify-between">
@@ -201,13 +205,13 @@ export default function Dashboard() {
         </div>
 
         <div className="mx-5 text-lg uppercase">
-          <Head name="" links="+ CREATE NEW FORM"></Head>
+          <Head name="" links="+ CREATE NEW FORM" to='/AssessmentForm'></Head>
         </div>
         <div className="w-full h-[0px] border border-gray-4"></div>
 
         <div className="mx-5 h-1/10 flex flex-col gap-2">
           <div className="">
-            <Head name="Notifications" links="See All"></Head>
+            <Head name="Notifications" links="See All" to='#'></Head>
           </div>
 
           <div className="flex gap-1">
@@ -235,7 +239,7 @@ export default function Dashboard() {
         </div>
 
         <div className="h-1/10 mx-5 gap-2 mb-9">
-          <Head name="FORMS" links="See All"></Head>
+          <Head name="FORMS" links="See All" to='#'></Head>
 
           <div className="flex gap-1">
 

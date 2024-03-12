@@ -1,6 +1,9 @@
 "use client"
 
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
+import ProgressBar from "../_components/Questionnaire/Progressbar";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 // import Head1 from "./HeadComp";
 // import Question from "./QuestionComp";
@@ -259,10 +262,66 @@ import { useRouter } from "next/navigation"
 //         </>
 //     )
 // }
-
-
+interface Section {
+    sectionId: number;
+    sectionName: string;
+    sectionDescribtion: string;
+    // Add other properties if needed
+}
+interface Patient {
+    patientId: number;
+    patientName: string;
+    age: number,
+    gender: number,
+    // consultingDate: string;
+    // ... other properties
+}
 export default function page() {
     const router = useRouter();
+
+    const [section, setSection] = useState<Section[]>([])
+    // const [patientData, setPatientData] = useState<Patient>();
+    const [progress, setProgress] = useState(60)
+
+
+    // const searchParams = useSearchParams();
+    // const patientId = searchParams.get('patientId');
+
+    const Headers = {
+        'Authorization': 'Bearer ' + localStorage.getItem("token"),
+        'Content-Type': 'application/json',
+    };
+
+    const fetchData = async () => {
+        try {
+            const response = await axios.get("http://localhost:3001/section-master");
+            console.log(response.data);
+            setSection(response.data)
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    // const fetchDetails = async () => {
+    //     try {
+    //         const response = await axios.get(`http://localhost:3001/patient/${patientId}`, {
+    //             headers: Headers
+    //         });
+    //         return response.data;
+    //     } catch (error) {
+    //         console.error('Error fetching patient details:', error);
+    //     }
+    // }
+    
+
+    
+
+    useEffect(() => {
+        fetchData();
+        // fetchDetails().then((data) => setPatientData(data))
+    }, []);
+
+    // const patientName = patientData?.patientName || 'Unknown';
 
     return (
         <>
@@ -270,171 +329,51 @@ export default function page() {
             {/* <div className="relative ml-5">
             <div className="absolute top-5 -left-[0.2rem] bg-gray-5 h-10 w-10 rounded-full border-4 text-center">1</div>
             </div> */}
-            <div className="px-5 mt-6 flex flex-col gap-1 w-full h-full">
-                <div className="relative flex">
-                    <div className="flex flex-col gap-4">
-                        <div className="absolute  -left-[0.5rem] bg-gray-5 h-10 w-10 rounded-full flex items-center justify-center">
-                            <p className="text-center">1</p>
-                        </div>
-                        <div className="border-l-2 border-gray-200 ml-3 mt-11 py-16 ">
-                        </div>
-                    </div>
-                    <div className="pl-8 flex flex-col gap-5 top-2 w-full">
-                        <div className="w-full">
-                            <h1 className="text-sm font-semibold">General Information</h1>
-                            <p className="text-sm font-normal">Location, occupation, education ...</p>
-                        </div>
-                        <div className="flex justify-between">
-                            <div className="w-full">
-                                <p>Completion: 0%</p>
-                                <div className="w-11/12 h-[0px] border-2 border-neutral-200"></div>
-                            </div>
-                            <button className="w-[94px] h-[25px] px-2 border-2 border-stone-300 rounded justify-center" onClick={()=>router.push('/Questionnaire/GeneralInformation')}>START</button>
-                        </div>
-                        <div className="text-sm font-medium underline text-gray-2">
-                            <a className="" href="">Know more</a>
-                        </div>
-                    </div>
-                </div>
+            {section.map((section, index) => {
+                return (
+                    <>
+                        <div key={index} className="px-5 mt-6 flex flex-col gap-1 w-full h-full">
 
-                <div className="relative flex">
-                    <div className="flex flex-col gap-4">
-                        <div className="absolute  -left-[0.5rem] bg-gray-5 h-10 w-10 rounded-full flex items-center justify-center">
-                            <p className="text-center">2</p>
-                        </div>
-                        <div className="border-l-2 border-gray-200 ml-3 mt-11 py-16 ">
-                        </div>
-                    </div>
-                    <div className="pl-8 flex flex-col gap-5 top-2 w-full">
-                        <div className="w-full">
-                            <h1 className="text-sm font-semibold">Health and Well-Being</h1>
-                            <p className="text-sm font-normal">Hearing, Voice, Oral health</p>
-                        </div>
-                        <div className="flex justify-between">
-                            <div className="w-full">
-                                <p>Completion: 0%</p>
-                                <div className="w-11/12 h-[0px] border-2 border-neutral-200"></div>
+                            <div className="relative flex">
+                                <div className="flex flex-col gap-4">
+                                    <div className="queBox">
+                                        <p>{section.sectionId}</p>
+                                    </div>
+                                    <div className="verLine">
+                                    </div>
+                                </div>
+                                <div className="queTitle">
+                                    <div className="w-full">
+                                        <h1 className="text-sm font-semibold">{section.sectionName}</h1>
+                                        <p className="text-sm font-normal">{section.sectionDescribtion}</p>
+                                    </div>
+                                    <div className="flex justify-between">
+                                        <div className="w-full">
+                                            <ProgressBar progress={progress} />
+                                        </div>
+                                        <button className="queBtn" onClick={() => router.push(`/Questionnaire/${section.sectionName}?sectionId=${section.sectionId}`)}>START</button>
+                                    </div>
+                                    <div className="text-sm font-medium underline text-gray-2">
+                                        <a className="" href="">Know more</a>
+                                    </div>
+                                </div>
                             </div>
-                            <button className="w-[94px] h-[25px] px-2 border-2 border-stone-300 rounded justify-center"  onClick={()=>router.push('/Questionnaire/HealthWellBeing')}>START</button>
-                        </div>
-                        <div className="text-sm font-medium underline text-gray-2">
-                            <a className="" href="">Know more</a>
-                        </div>
-                    </div>
-                </div>
 
-                <div className="relative flex">
-                    <div className="flex flex-col gap-4">
-                        <div className="absolute  -left-[0.5rem] bg-gray-5 h-10 w-10 rounded-full flex items-center justify-center">
-                            <p className="text-center">3</p>
                         </div>
-                        <div className="border-l-2 border-gray-200 ml-3 mt-11 py-16 ">
-                        </div>
-                    </div>
-                    <div className="pl-8 flex flex-col gap-5 top-2 w-full">
-                        <div className="w-full">
-                            <h1 className="text-sm font-semibold">Activity and Mobility</h1>
-                            <p className="text-sm font-normal">Daily activities, Take bath, Prepare food..</p>
-                        </div>
-                        <div className="flex justify-between">
-                            <div className="w-full">
-                                <p>Completion: 0%</p>
-                                <div className="w-11/12 h-[0px] border-2 border-neutral-200"></div>
-                            </div>
-                            <button className="w-[94px] h-[25px] px-2 border-2 border-stone-300 rounded justify-center"  onClick={()=>router.push('/Questionnaire/ActivityAndMobility')}>START</button>
-                        </div>
-                        <div className="text-sm font-medium underline text-gray-2">
-                            <a className="" href="">Know more</a>
-                        </div>
-                    </div>
-                </div>
 
-                <div className="relative flex">
-                    <div className="flex flex-col gap-4">
-                        <div className="absolute  -left-[0.5rem] bg-gray-5 h-10 w-10 rounded-full flex items-center justify-center">
-                            <p className="text-center">3</p>
-                        </div>
-                        <div className="border-l-2 border-gray-200 ml-3 mt-11 py-16 ">
-                        </div>
-                    </div>
-                    <div className="pl-8 flex flex-col gap-5 top-2 w-full">
-                        <div className="w-full">
-                            <h1 className="text-sm font-semibold">Nutrition</h1>
-                            <p className="text-sm font-normal">Food intake, weight loss..</p>
-                        </div>
-                        <div className="flex justify-between">
-                            <div className="w-full">
-                                <p>Completion: 0%</p>
-                                <div className="w-11/12 h-[0px] border-2 border-neutral-200"></div>
-                            </div>
-                            <button className="w-[94px] h-[25px] px-2 border-2 border-stone-300 rounded justify-center"  onClick={()=>router.push('/Questionnaire/Nutrition')}>START</button>
-                        </div>
-                        <div className="text-sm font-medium underline text-gray-2">
-                            <a className="" href="">Know more</a>
-                        </div>
-                    </div>
-                </div>
+                    </>
+                )
+            })}
 
-                <div className="relative flex">
-                    <div className="flex flex-col gap-4">
-                        <div className="absolute  -left-[0.5rem] bg-gray-5 h-10 w-10 rounded-full flex items-center justify-center">
-                            <p className="text-center">5</p>
-                        </div>
-                        <div className="border-l-2 border-gray-200 ml-3 mt-11 py-16 ">
-                        </div>
-                    </div>
-                    <div className="pl-8 flex flex-col gap-5 top-2 w-full">
-                        <div className="w-full">
-                            <h1 className="text-sm font-semibold">Mental health</h1>
-                            <p className="text-sm font-normal">Food intake, weight loss..</p>
-                        </div>
-                        <div className="flex justify-between">
-                            <div className="w-full">
-                                <p>Completion: 0%</p>
-                                <div className="w-11/12 h-[0px] border-2 border-neutral-200"></div>
-                            </div>
-                            <button className="w-[94px] h-[25px] px-2 border-2 border-stone-300 rounded justify-center"  onClick={()=>router.push('/Questionnaire/MentalHealth')}>START</button>
-                        </div>
-                        <div className="text-sm font-medium underline text-gray-2">
-                            <a className="" href="">Know more</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="relative flex">
-                    <div className="flex flex-col gap-4">
-                        <div className="absolute  -left-[0.5rem] bg-gray-5 h-10 w-10 rounded-full flex items-center justify-center">
-                            <p className="text-center">6</p>
-                        </div>
-                        <div className="ml-3 mt-8 py-16 ">
-                        </div>
-                    </div>
-                    <div className="pl-8 flex flex-col gap-5 top-2 w-full">
-                        <div className="w-full">
-                            <h1 className="text-sm font-semibold">Income Details</h1>
-                            <p className="text-sm font-normal">Monthly, yearly income, Insurance...</p>
-                        </div>
-                        <div className="flex justify-between">
-                            <div className="w-full">
-                                <p>Completion: 0%</p>
-                                <div className="w-11/12 h-[0px] border-2 border-neutral-200"></div>
-                            </div>
-                            <button className="w-[94px] h-[25px] px-2 border-2 border-stone-300 rounded justify-center"  onClick={()=>router.push('/Questionnaire/IncomeDetails')}>START</button>
-                        </div>
-                        <div className="text-sm font-medium underline text-gray-2">
-                            <a className="" href="">Know more</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div className='h-[80px] py-4  flex gap-4 w-full px-5 text-sm font-medium  shadow-inner'>
                 <div className='w-full  h-[48px] flex justify-center items-center text-center bg-gray-1 text-gray-6'>
                     <button type='submit' className='button_footer'>
                         <p className='uppercase'>Submit</p>
                     </button>
                 </div>
-                
+
             </div>
+
         </>
     )
 }

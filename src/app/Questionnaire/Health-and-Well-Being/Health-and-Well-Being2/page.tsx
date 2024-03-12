@@ -5,8 +5,10 @@ import { Formik, Form, Field, ErrorMessage } from "formik"
 import * as Yup from 'yup';
 import Question from "@/app/_components/Questionnaire/Question";
 import '../../../../../styles/global.css'
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import TextError from "@/formik/TextError";
+import axios from "axios";
+import { useEffect, useState } from "react";
 // import "../../../../../styles/global.css"
 
 // const option1= [
@@ -14,25 +16,133 @@ import TextError from "@/formik/TextError";
 // ]
 const initialValues = {
     option1: false,
-    lessPhoneUse: "",
-    shy: '',
-    feelIrritable: '',
-    feelFrustrated: '',
+    HearingProbelemwithphone: "",
+    Embarrassement: '',
+    Irriation: '',
+    Frustration: '',
 
 }
 const validationSchema = Yup.object({
     option1: Yup.boolean().oneOf([true], 'Please check the box'),
-    lessPhoneUse: Yup.string().oneOf(['Yes', 'No', 'Sometimes']).required('Required'),
-    shy: Yup.string().oneOf(['Yes', 'No', 'Sometimes']).required('Required'),
-    feelIrritable: Yup.string().oneOf(['Yes', 'No', 'Sometimes']).required('Required'),
-    feelFrustrated: Yup.string().oneOf(['Yes', 'No', 'Sometimes']).required('Required'),
+    HearingProbelemwithphone: Yup.string().oneOf(['Yes', 'No', 'Sometimes']).required('Required'),
+    Embarrassement: Yup.string().oneOf(['Yes', 'No', 'Sometimes']).required('Required'),
+    Irriation: Yup.string().oneOf(['Yes', 'No', 'Sometimes']).required('Required'),
+    Frustration: Yup.string().oneOf(['Yes', 'No', 'Sometimes']).required('Required'),
 })
+
+interface QuestionData {
+    questionId: number;
+    questionEnglish: string;
+    questionMarathi: string;
+    questionType: string;
+    questionOptions: string[];
+    name: string;
+    // subquestions: Subquestions[];
+}
+
+interface Section {
+    sectionId: number;
+    sectionName: string;
+    sectionDescribtion: string;
+}
+
+
 export default function page() {
     const router = useRouter()
+
+    const searchParams = useSearchParams();
+    const sectionId = searchParams.get('sectionId');
+
+    const [sectionData, setSectionData] = useState<Section>()
+    const [completedQuestions, setCompletedQuestions] = useState(0);
+    const [answeredQuestions, setAnsweredQuestions] = useState([]);
+
+    const [questionSet, setQuestionSet] = useState<QuestionData[]>([])
+
+    useEffect(() => {
+        const fetchQuestions = async () => {
+            try {
+                const response = await axios.get(`http://localhost:3001/question-master/${sectionId}`)
+
+                console.log(response.data)
+                setQuestionSet(response.data)
+            }
+            catch (error) {
+                console.log(error)
+            }
+        }
+        fetchQuestions();
+    }, [])
+    // console.log()
+    const fetchData = async () => {
+        try {
+            const response = await axios.get(`http://localhost:3001/section-master/${sectionId}`);
+            // console.log(response.data);
+            return response.data;
+            // setSectionData(response.data)
+        } catch (error) {
+            console.error(error);
+        }
+    };
+    // console.log("question ", questionSet)
+    useEffect(() => {
+        // fetchData();
+        fetchData().then((data) => setSectionData(data))
+    }, []);
+    // console.log(sectionData)
+    const sectionName = sectionData?.sectionName || 'Unknown';
+
+    // 
+
+
+    const sendAnswerToServer = async (questionId: number, answer: string) => {
+        try {
+            // Assuming you have an API endpoint for storing answers
+            await axios.post("http://localhost:3001/patient-question-tracker", {
+                questionId: questionId,
+                sectionId: sectionId,
+                answer: answer,
+            });
+
+            console.log(`Answer for question ${questionId} successfully stored!`);
+        } catch (error) {
+            console.error(`Error storing answer for question ${questionId}:`, error);
+        }
+    };
+
+    const submitForm = async (values) => {
+        for (let i = 1; i < questionSet.length; i++) {
+            const questionId = questionSet[i].questionId;
+            const answer = values[questionSet[i].name];  // Assuming 'name' property holds the field name
+
+            await sendAnswerToServer(questionId, answer);
+        }
+
+        try {
+            await axios.post("http://localhost:3001/patient-section-master", {
+                patientId: 1,
+                sectionId: sectionId,
+                completedStatus: Math.round((completedQuestions / questionSet.length) * 100),
+            });
+
+            console.log(`Patient's section tracker for section ${sectionId} updated!`);
+        } catch (error) {
+            console.error(`Error updating patient's section tracker:`, error);
+        }
+
+    };
+
+    const [wid, setWid] = useState(Number(window.innerWidth / 10))
+    useEffect(() => {
+        setWid(window.innerWidth / 10)
+    })
+    const progress = Math.round((completedQuestions / questionSet.length) * 10);
+
+
     return (
         <>
             <div className="mt-5">
-                <Head1 name="Health and Well Being" count="2" progress="80%" />
+                <Head1 name={sectionName} count={sectionId} progress={progress} />
             </div>
 
             <Formik
@@ -40,10 +150,32 @@ export default function page() {
                 validationSchema={validationSchema}
                 onSubmit={(values) => {
                     console.log(values)
+                    submitForm(values);
                     router.push('/Questionnaire')
                 }}
             >
                 {(formik) => {
+
+                    const updateProgress = (questionIndex:number, value:string) => {
+                        const questionKey = `${questionIndex}_${subquestionIndex}`;
+
+                        if (!answeredQuestions.includes(questionKey)) {
+                            setCompletedQuestions((prevCount) => prevCount + 1);
+                            setAnsweredQuestions((prevAnswers) => [...prevAnswers, questionKey]);
+                        }
+
+                        // Update progress based on the selected value
+                        // You may need to adjust this logic based on your requirements
+                        if (value === 'Yes') {
+                            // Update progress accordingly
+                        } else if (value === 'Sometimes') {
+                            // Update progress accordingly
+                        } else if (value === 'No') {
+                            // Update progress accordingly
+                        }
+                    };
+
+                    console.log(formik.values)
                     return (
                         <Form>
                             <div className="mx-5">
@@ -88,12 +220,41 @@ export default function page() {
                                             </div>
                                             <label htmlFor="">I have read and understand the instructions</label>
                                         </div>
-                                        <ErrorMessage component={TextError} name="option1"/>
+                                        <ErrorMessage component={TextError} name="option1" />
                                     </div>
                                 </div>
 
                                 <div className='flex flex-col gap-8'>
-                                    <div className='flex flex-col gap-4'>
+
+                                    {questionSet.slice(1).map((question, index) => {
+                                        return (
+                                            <div>
+                                                <div className='flex flex-col gap-4'>
+                                                    <Question
+                                                        english={question.questionEnglish}
+                                                        marathi={question.questionMarathi} />
+
+                                                    <div className="h-[48px] flex gap-4 text-gray-1 font-medium">
+                                                        <button className={`button1 ${formik.values[question.name] === 'Yes' ? 'button-active' : ''}`} type='button' name={question.name} onClick={() => {
+                                                            formik.setFieldValue(question.name, 'Yes');
+                                                            updateProgress(index, 'Yes');
+                                                        }}>Yes</button>
+                                                        <button className={`button1 ${formik.values[question.name] === 'Sometimes' ? 'button-active' : ''}`} type='button' name={question.name} onClick={() => {
+                                                            formik.setFieldValue(question.name, 'Sometimes');
+                                                            updateProgress(index, 'Sometimes');
+                                                        }}>Sometimes</button>
+                                                        <button className={`button1 ${formik.values[question.name] === 'No' ? 'button-active' : ''}`} type='button' name={question.name} onClick={() => {
+                                                            formik.setFieldValue(question.name, 'No');
+                                                            updateProgress(index, 'No');
+                                                        }}>No</button>
+                                                    </div>
+
+                                                    <ErrorMessage component={TextError} name="lessPhoneUse" />
+                                                </div>
+                                            </div>
+                                        )
+                                    })}
+                                    {/* <div className='flex flex-col gap-4'>
                                         <Question
                                             english="Does a hearing problem cause you to use the phone less often than you would like?
                                     "
@@ -172,7 +333,7 @@ export default function page() {
                                             }}>No</button>
                                         </div>
                                         <ErrorMessage component={TextError} name="feelFrustrated" />
-                                    </div>
+                                    </div> */}
                                 </div>
 
                                 <div className='mt-24'>
@@ -187,9 +348,9 @@ export default function page() {
                                             </button>
                                         </div>
                                         <div className='w-8/12 h-[48px] flex justify-center items-center text-center bg-gray-1 text-gray-6'>
-                                        <button className={`button_footer ${(!formik.isValid || !formik.dirty) ? 'disabled' : ''}`}type='submit' 
-                                                    disabled={!formik.isValid || !formik.dirty}
-                                                    >
+                                            <button className={`button_footer ${(!formik.isValid || !formik.dirty) ? 'disabled' : ''}`} type='submit'
+                                                disabled={!formik.isValid || !formik.dirty}
+                                            >
                                                 <p className='uppercase'>Save And Next</p>
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
                                                     <path fillRule="evenodd" d="M3.75 12a.75.75 0 01.75-.75h13.19l-5.47-5.47a.75.75 0 011.06-1.06l6.75 6.75a.75.75 0 010 1.06l-6.75 6.75a.75.75 0 11-1.06-1.06l5.47-5.47H4.5a.75.75 0 01-.75-.75z" clipRule="evenodd" />

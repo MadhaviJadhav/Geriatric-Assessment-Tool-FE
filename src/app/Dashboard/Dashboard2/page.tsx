@@ -1,31 +1,68 @@
 "use client"
 import moment from 'moment';
-import Head1 from '../Head1';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+// import Head1 from '../Head1';
+import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import Head from '@/app/_components/Dashboard/Head';
+import axios from 'axios';
+
+interface Patient {
+    patientId: number;
+    patientName: string;
+    age: number,
+    gender: number,
+    consultingDate:string
+    
+
+}
 export default function page() {
     const steps = ["Link Created", "Form Submited", "Assmt. Completed", "Report Generated"];
     const [current, setCurrent] = useState(0)
     const [complete, setComplete] = useState(false)
+
+    const [patientData, setPatientData] = useState<Patient>();
+    
     const router = useRouter()
+    const searchParams = useSearchParams();
+    const patientId = searchParams.get('patientId');
+
+    const Headers = {
+        'Authorization': 'Bearer ' + localStorage.getItem("token"),
+        'Content-Type': 'application/json',
+    };
+
+    const fetchDetails = async () => {
+        try {
+            const response = await axios.get(`http://localhost:3001/patient/${patientId}`, {
+                headers: Headers
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching patient details:', error);
+        }
+    }
+    useEffect(() => {
+        //   fetchDetails().then((data)=>setPatientData(data));
+        fetchDetails().then((data) => setPatientData(data))
+        console.log(patientData)
+    }, [])
+
+    const patientName = patientData?.patientName || 'Unknown';
+    const age = patientData?.age;
+    const gender = patientData?.gender||"Unknown";
+    const date = patientData?.consultingDate;
+
     return (
         <>
             <div className='flex flex-col gap-8'>
                 <div className="flex gap-1 px-5 py-5">
                     <div className="w-full h-[98px] bg-gray-6 flex flex-col  gap-1 p-2">
                         <div className="flex  justify-between mt-1">
-                            <p className="h-[17px] text-sm font-semibold ml-2">Name</p>
-                            <p className="h-[15px] text-gray-3 text-xs font-normal">{moment().calendar(null, {
-                                sameDay: '[Today], h:mmA',
-                                nextDay: '[Tomorrow], h:mmA',
-                                nextWeek: 'dddd, h:mmA',
-                                lastDay: '[Yesterday], h:mmA',
-                                lastWeek: '[Last] dddd, h:mmA',
-                                sameElse: 'L [your custom text]'
-                            })}</p>
+                            <p className="h-[17px] text-sm font-semibold ml-2">{patientName}</p>
+                            <p className="h-[15px] text-gray-3 text-xs font-normal">{moment(date).format('ddd, HH:mm A')}</p>
                         </div>
                         <div>
-                            <p className="text-gray-1 text-sm font-normal ml-2">ID:12233,age,female</p>
+                            <p className="text-gray-1 text-sm font-normal ml-2">ID: {patientId}, {age}, {gender}</p>
                         </div>
                         <div className="w-full h-[0px] border border-gray-5"></div>
                         <div className="flex justify-between">
@@ -35,7 +72,7 @@ export default function page() {
                 </div>
 
                 <div className="mx-5 text-lg uppercase">
-                    <Head1 name="" links="+ CREATE NEW FORM"></Head1>
+                    <Head name="" links="+ CREATE NEW FORM" to="/AssessmentForm"></Head>
                 </div>
       
                 <div className='relative'>

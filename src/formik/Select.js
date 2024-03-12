@@ -5,7 +5,7 @@ import TextError from './TextError'
 const Selection = (props) => {
     const { label, name, options, ...rest } = props
     return (
-        <div>
+        <div className='mx-5'>
             <Field as='select' id={name} name={name} {...rest}>
                 {options.map(option => {
                     return (
@@ -14,8 +14,7 @@ const Selection = (props) => {
                 })
                 }
             </Field>
-            <br/>
-            <br/>
+
             <ErrorMessage component={TextError} name={name} />
         </div>
     )

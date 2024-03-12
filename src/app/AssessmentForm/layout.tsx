@@ -1,11 +1,11 @@
 import { ReactNode } from "react"
 import ProtectedRoute from "../_components/ProtectedRoute"
 
-// export function metadata(){
-//     return{
-//         title: 'Assessment Form'
-//     }
-//   }
+export function metadata(){
+    return{
+        title: 'Assessment Form'
+    }
+  }
 
   interface props{
     children:ReactNode

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Field, ErrorMessage } from 'formik'
 import TextError from './TextError'
+import Input from './Input'
 const RadioButton = (props) => {
   const { label, name, options, ...rest } = props
   return (
@@ -13,23 +14,25 @@ const RadioButton = (props) => {
               return (
                 <>
                   <React.Fragment key={option.key}>
-                    <div className='mb-[49px] flex gap-1'>
+                    <div className='mb-[49px] flex gap-1 mx-5'>
                       <input type='radio' id={option.value} {...field}
                         value={option.value}
-                        checked={field.value === option.value} />
+                        checked={field.value === option.value}
+                        onClick={() => rest.onClick && rest.onClick()} />
                       <label htmlFor={option.value} className='mb-[49px] capitalize'>{option.key}</label>
                     </div>
 
                   </React.Fragment>
-                  <br />
-                  
+                  <br/>
                 </>
               )
             })
           }
         }
       </Field>
-      <ErrorMessage component={TextError} name={name} />
+      {/* <Input/> */}
+      <ErrorMessage className='mx-5' component={TextError} name={name} />
+      
     </div>
   )
 }

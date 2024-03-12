@@ -39,8 +39,8 @@ body {
   background-color: #F2F2F2;
   position: absolute;
   left: 16px;
-  top: 14px;
-  width: 80%;
+  /* top: 14px; */
+  width: 95%;
 }
 
 .error {
@@ -61,7 +61,7 @@ body {
   border: 2px solid #333333;
 }
 .button1-active{
-  background-color: hsl(0, 0%, 74%);
+  background-color: hwb(0 74% 26%);
   border: 2px solid #333333;
 }
 .button1 {
@@ -143,8 +143,8 @@ body {
 .range-input{
   background: #E0E0E0;
   -webkit-appearance: none;
-  /* border-radius: 20px; */
-  height: 5px;
+  border-radius: 20px;
+  height: 4px;
 }
 /* .range-input::-webkit-scrollbar-track-piece{
   background: #333333;
@@ -152,12 +152,13 @@ body {
 .range-input::-webkit-slider-thumb{
   /* -webkit-appearance: none; */
  appearance: none;
- width: 16px;
- height: 16px;
+ width: 12px;
+ border: none;
+ height: 12px;
  border-radius: 50%;
  border: none;
  background: #333333;
- cursor: pointer;
+ /* cursor: pointer; */
  
   /* appearance: none; */
 }
@@ -218,6 +219,29 @@ body {
     @apply bg-gray-1;
 }
 
+.queBox{
+  @apply absolute  -left-[0.5rem] bg-gray-5 h-10 w-10 rounded-full flex items-center justify-center;
+}
+
+.queBox p{
+  @apply text-center;
+}
+
+.queTitle{
+  @apply pl-8 flex flex-col gap-5 top-2 w-full;
+}
+
+.queBtn{
+  @apply w-[94px] h-[28px] px-2 border-2 border-stone-300 rounded justify-center;
+}
+
+.verLine{
+  @apply border-l-2 border-gray-200 ml-3 mt-11 py-16;
+}
+
+.radioButton{
+  @apply mx-5;
+}
 
 .slick-list, .slick-slider, .slick-track{
     padding: 1rem 0;

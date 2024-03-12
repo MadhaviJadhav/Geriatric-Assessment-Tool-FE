@@ -1,9 +1,9 @@
 import React from 'react'
 import '../../styles/global.css'
-const TextError = (props) => {
+const TextError = ({children}) => {
   return (
     <div className='error'>
-        {props.children}
+        {children}
     </div>
   )
 }
